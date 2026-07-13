@@ -1,8 +1,11 @@
 import os
-from flask import Flask, render_template, request, flash, redirect, url_for
+import uuid
+from functools import wraps
+from flask import Flask, render_template, request, flash, redirect, url_for, session
 from config import Config
 from models import db, User, Project, Skill, Message
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -89,6 +92,55 @@ def contact():
             
     # Jika pengunjung hanya membuka halaman (GET)
     return render_template('contact.html')
+
+# =============================================================
+# Route Dashboard & Autentikasi (Tahap 5)
+# =============================================================
+# Decorator untuk membatasi akses halaman admin
+# Halaman dengan @login_required hanya bisa diakses jika user sudah login
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'admin_id' not in session:
+            flash('Akses ditolak. Silakan login terlebih dahulu.', 'warning')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+@app.route('/dashboard/login', methods=['GET', 'POST'])
+def login():
+    # Jika sudah login, langsung alihkan ke dashboard
+    if 'admin_id' in session:
+        return redirect(url_for('dashboard'))
+        
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        # Cari user di database berdasarkan username
+        user = User.query.filter_by(username=username).first()
+        
+        # Cek apakah user ada dan password cocok (menggunakan werkzeug)
+        if user and check_password_hash(user.password, password):
+            # Simpan id user ke dalam session
+            session['admin_id'] = user.id
+            flash('Login berhasil! Selamat datang di Dashboard.', 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Username atau password salah!', 'danger')
+            
+    return render_template('dashboard/login.html')
+@app.route('/dashboard/logout')
+def logout():
+    # Hapus data admin_id dari session
+    session.pop('admin_id', None)
+    flash('Anda telah berhasil logout.', 'success')
+    return redirect(url_for('login'))
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    # Ini adalah placeholder untuk Tahap 6 (Dashboard Utama)
+    # Untuk sementara, cukup tampilkan teks agar bisa menguji login
+    return "<h1>Ini Halaman Dashboard</h1><p>Halaman ini hanya bisa diakses jika sudah login.</p><a href='/dashboard/logout'>Logout</a>"
 
 if __name__ == '__main__':
     init_database()
