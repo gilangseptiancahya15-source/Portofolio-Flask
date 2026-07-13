@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5 my-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <!-- Navigasi Back -->
+            <a href="{{ url_for('portfolio') }}" class="text-decoration-none text-muted mb-4 d-inline-block hover-primary">
+                <i class="bi bi-arrow-left me-1"></i> Kembali ke Portfolio
+            </a>
+            
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                <!-- Cover Image Detail -->
+                {% if project.image %}
+                <img src="{{ url_for('static', filename='uploads/' + project.image) }}" alt="{{ project.title }}" class="img-fluid w-100" style="max-height: 450px; object-fit: cover;">
+                {% else %}
+                <div class="bg-light text-secondary d-flex align-items-center justify-content-center w-100 border-bottom" style="height: 300px;">
+                    <i class="bi bi-image text-muted opacity-50" style="font-size: 5rem;"></i>
+                </div>
+                {% endif %}
+                
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="fw-bold mb-3">{{ project.title }}</h1>
+                    
+                    <!-- Metadata (Tanggal dan Teknologi) -->
+                    <div class="d-flex flex-wrap align-items-center text-muted mb-4 gap-4 border-bottom pb-4">
+                        <div>
+                            <i class="bi bi-calendar3 text-primary me-2"></i> 
+                            {{ project.created_at.strftime('%d %B %Y') }}
+                        </div>
+                        
+                        {% if project.technology %}
+                        <div>
+                            <i class="bi bi-code-square text-primary me-2"></i>
+                            <span class="fw-medium">{{ project.technology }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Isi Deskripsi (pre-wrap untuk mempertahankan Enter/Baris Baru) -->
+                    <div class="project-content mb-5" style="white-space: pre-wrap; line-height: 1.8; color: #4a4a4a;">
+{{ project.description }}
+                    </div>
+                    
+                    <!-- Tombol Visit Link -->
+                    {% if project.link %}
+                    <div class="text-center bg-light p-4 rounded-3 border">
+                        <p class="mb-3 text-muted">Ingin melihat secara langsung?</p>
+                        <a href="{{ project.link }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg px-5 shadow-sm">
+                            <i class="bi bi-box-arrow-up-right me-2"></i> Kunjungi Project
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
