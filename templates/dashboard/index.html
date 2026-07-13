@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+<div class="container py-5 my-3">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <h2 class="fw-bold text-primary"><i class="bi bi-speedometer2 me-2 text-dark"></i> Dashboard Utama</h2>
+        <span class="text-muted d-none d-sm-inline">Selamat datang kembali, <strong>{{ user.name }}</strong></span>
+    </div>
+
+    <!-- Statistik Cards (Tiga Kartu Berwarna) -->
+    <div class="row g-4 mb-5">
+        
+        <!-- Total Projects Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 bg-primary text-white h-100">
+                <div class="card-body p-4 d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Total Project</h6>
+                        <h2 class="display-5 fw-bold mb-0">{{ total_projects }}</h2>
+                    </div>
+                    <div>
+                        <i class="bi bi-folder2-open opacity-50" style="font-size: 4rem;"></i>
+                    </div>
+                </div>
+                <!-- Card Footer untuk Navigasi -->
+                <div class="card-footer bg-transparent border-top border-light border-opacity-25 p-0">
+                    <a href="{{ url_for('manage_projects') }}" class="btn btn-link text-white text-decoration-none w-100 text-start py-2 px-4 d-flex justify-content-between align-items-center">
+                        <span>Kelola Project</span>
+                        <i class="bi bi-arrow-right-circle"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pesan Baru Card (Otomatis berubah merah jika ada pesan baru) -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 {% if unread_messages > 0 %}bg-danger{% else %}bg-success{% endif %} text-white h-100">
+                <div class="card-body p-4 d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Pesan Belum Dibaca</h6>
+                        <h2 class="display-5 fw-bold mb-0">{{ unread_messages }}</h2>
+                    </div>
+                    <div>
+                        <i class="bi bi-envelope-paper opacity-50" style="font-size: 4rem;"></i>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top border-light border-opacity-25 p-0">
+                    <a href="{{ url_for('manage_messages') }}" class="btn btn-link text-white text-decoration-none w-100 text-start py-2 px-4 d-flex justify-content-between align-items-center">
+                        <span>Lihat Kotak Masuk</span>
+                        <i class="bi bi-arrow-right-circle"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Skills Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 bg-secondary text-white h-100">
+                <div class="card-body p-4 d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Total Keahlian</h6>
+                        <h2 class="display-5 fw-bold mb-0">{{ total_skills }}</h2>
+                    </div>
+                    <div>
+                        <i class="bi bi-lightning-charge opacity-50" style="font-size: 4rem;"></i>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top border-light border-opacity-25 p-0">
+                    <a href="{{ url_for('manage_profile') }}" class="btn btn-link text-white text-decoration-none w-100 text-start py-2 px-4 d-flex justify-content-between align-items-center">
+                        <span>Kelola Profil & Skill</span>
+                        <i class="bi bi-arrow-right-circle"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Informasi Sistem (Statik/Informasional) -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3 fw-bold">
+                    <i class="bi bi-info-circle text-primary me-2"></i> Informasi Sistem
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            Status Aplikasi
+                            <span class="badge bg-success rounded-pill px-3 py-2">Berjalan Normal</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            Pengguna Aktif
+                            <span class="text-muted fw-semibold">@{{ user.username }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            Framework Basis
+                            <span class="text-muted">Flask 3.1.1 (Python)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

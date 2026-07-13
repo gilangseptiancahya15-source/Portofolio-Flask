@@ -138,9 +138,15 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    # Ini adalah placeholder untuk Tahap 6 (Dashboard Utama)
-    # Untuk sementara, cukup tampilkan teks agar bisa menguji login
-    return "<h1>Ini Halaman Dashboard</h1><p>Halaman ini hanya bisa diakses jika sudah login.</p><a href='/dashboard/logout'>Logout</a>"
+    # Menghitung statistik untuk ditampilkan di dashboard
+    total_projects = Project.query.count()
+    unread_messages = Message.query.filter_by(is_read=False).count()
+    total_skills = Skill.query.count()
+    
+    return render_template('dashboard/index.html', 
+                           total_projects=total_projects, 
+                           unread_messages=unread_messages,
+                           total_skills=total_skills)
 
 if __name__ == '__main__':
     init_database()
