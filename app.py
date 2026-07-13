@@ -260,6 +260,62 @@ def delete_project(id):
     flash('Project berhasil dihapus.', 'success')
     return redirect(url_for('manage_projects'))
 
+# =============================================================
+# Route Profil & Keahlian 
+# =============================================================
+@app.route('/dashboard/profile', methods=['GET', 'POST'])
+@login_required
+def manage_profile():
+    admin = User.query.first()
+    skills = Skill.query.order_by(Skill.level.desc()).all()
+    
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        bio = request.form.get('bio')
+        
+        if not name or not email or not bio:
+            flash('Semua kolom profil wajib diisi!', 'danger')
+        else:
+            admin.name = name
+            admin.email = email
+            admin.bio = bio
+            db.session.commit()
+            flash('Profil berhasil diperbarui!', 'success')
+            return redirect(url_for('manage_profile'))
+            
+    # Variabel user sebenarnya sudah disuntik oleh context_processor, 
+    # tapi kita pastikan data form terupdate saat page dimuat.
+    return render_template('dashboard/profile.html', user=admin, skills=skills)
+@app.route('/dashboard/skills/add', methods=['POST'])
+@login_required
+def add_skill():
+    name = request.form.get('name')
+    level = request.form.get('level')
+    
+    if name and level:
+        try:
+            level_int = int(level)
+            if 10 <= level_int <= 100:
+                new_skill = Skill(name=name, level=level_int)
+                db.session.add(new_skill)
+                db.session.commit()
+                flash('Keahlian baru berhasil ditambahkan!', 'success')
+            else:
+                flash('Level harus berada di antara 10 hingga 100!', 'danger')
+        except ValueError:
+            flash('Level harus berupa angka!', 'danger')
+            
+    return redirect(url_for('manage_profile'))
+@app.route('/dashboard/skills/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_skill(id):
+    skill = Skill.query.get_or_404(id)
+    db.session.delete(skill)
+    db.session.commit()
+    flash('Keahlian berhasil dihapus.', 'success')
+    return redirect(url_for('manage_profile'))
+
 if __name__ == '__main__':
     init_database()
     app.run(debug=True)
