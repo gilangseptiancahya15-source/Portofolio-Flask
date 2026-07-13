@@ -1,0 +1,71 @@
+/* =============================================================
+   style.css - Custom Stylesheet
+   ============================================================= */
+
+   body {
+    background-color: #F8F9FA;
+    color: #212529;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Konfigurasi Warna Utama (Clean & Modern) */
+.text-primary {
+    color: #4A90D9 !important;
+}
+
+.bg-primary {
+    background-color: #4A90D9 !important;
+}
+
+.btn-primary {
+    background-color: #4A90D9;
+    border-color: #4A90D9;
+}
+
+.btn-primary:hover {
+    background-color: #3b73ad;
+    border-color: #3b73ad;
+}
+
+.btn-outline-primary {
+    color: #4A90D9;
+    border-color: #4A90D9;
+}
+
+.btn-outline-primary:hover {
+    background-color: #4A90D9;
+    color: white;
+}
+
+/* Efek Card Project */
+.card {
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Interaktivitas animasi card di hover */
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+}
+
+/* Kostumisasi Progress Bar */
+.progress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #e9ecef;
+}
+
+.skill-name {
+    font-weight: 500;
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+/* Bagian Hero (Background landing page) */
+.hero-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+    padding: 100px 0;
+    border-bottom: 1px solid #e9ecef;
+}
