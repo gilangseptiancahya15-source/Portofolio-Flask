@@ -13,6 +13,12 @@ app.config.from_object(Config)
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 db.init_app(app)
 
+def allowed_file(filename):
+    """Mengecek apakah ekstensi file diizinkan"""
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+
 def init_database():
     with app.app_context():
         db.create_all()
@@ -94,7 +100,7 @@ def contact():
     return render_template('contact.html')
 
 # =============================================================
-# Route Dashboard & Autentikasi (Tahap 5)
+# Route Dashboard & Autentikasi
 # =============================================================
 # Decorator untuk membatasi akses halaman admin
 # Halaman dengan @login_required hanya bisa diakses jika user sudah login
@@ -149,7 +155,7 @@ def dashboard():
                            total_skills=total_skills)
 
 # =============================================================
-# Route CRUD Project (Tahap 7)
+# Route CRUD Project 
 # =============================================================
 @app.route('/dashboard/projects')
 @login_required
@@ -170,13 +176,27 @@ def add_project():
         if not title or not description:
             flash('Judul dan Deskripsi wajib diisi!', 'danger')
         else:
+            # Handle Upload Gambar
+            filename = None
+            file = request.files.get('image')
+            
+            if file and file.filename != '':
+                if allowed_file(file.filename):
+                    safe_name = secure_filename(file.filename)
+                    # Tambahkan UUID agar nama file unik
+                    filename = f"{uuid.uuid4().hex[:8]}_{safe_name}"
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    file.save(filepath)
+                else:
+                    flash('Ekstensi file gambar tidak diizinkan!', 'danger')
+                    return redirect(request.url)
             new_project = Project(
                 title=title,
                 description=description,
                 technology=technology,
-                link=link
+                link=link,
+                image=filename
             )
-            # Logika upload gambar akan diimplementasikan pada Tahap 8
             
             db.session.add(new_project)
             db.session.commit()
@@ -195,11 +215,30 @@ def edit_project(id):
         project.technology = request.form.get('technology')
         project.link = request.form.get('link')
         
-        # Logika edit gambar akan diimplementasikan pada Tahap 8
         
         if not project.title or not project.description:
             flash('Judul dan Deskripsi wajib diisi!', 'danger')
         else:
+             # Handle Update Gambar
+            file = request.files.get('image')
+            
+            if file and file.filename != '':
+                if allowed_file(file.filename):
+                    safe_name = secure_filename(file.filename)
+                    filename = f"{uuid.uuid4().hex[:8]}_{safe_name}"
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    file.save(filepath)
+                    
+                    # Hapus gambar lama jika ada
+                    if project.image:
+                        old_filepath = os.path.join(app.config['UPLOAD_FOLDER'], project.image)
+                        if os.path.exists(old_filepath):
+                            os.remove(old_filepath)
+                            
+                    project.image = filename
+                else:
+                    flash('Ekstensi file gambar tidak diizinkan!', 'danger')
+                    return redirect(request.url)
             db.session.commit()
             flash('Project berhasil diperbarui!', 'success')
             return redirect(url_for('manage_projects'))
@@ -209,8 +248,13 @@ def edit_project(id):
 @login_required
 def delete_project(id):
     project = Project.query.get_or_404(id)
-    # Logika hapus file gambar akan ditambahkan pada Tahap 8
-    
+   
+    # Hapus file gambar dari server jika ada
+    if project.image:
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], project.image)
+        if os.path.exists(filepath):
+            os.remove(filepath)
+
     db.session.delete(project)
     db.session.commit()
     flash('Project berhasil dihapus.', 'success')
