@@ -316,6 +316,32 @@ def delete_skill(id):
     flash('Keahlian berhasil dihapus.', 'success')
     return redirect(url_for('manage_profile'))
 
+# =============================================================
+# Route Kotak Pesan 
+# =============================================================
+@app.route('/dashboard/messages')
+@login_required
+def manage_messages():
+    # Menampilkan semua pesan, diurutkan dari yang terbaru
+    messages = Message.query.order_by(Message.created_at.desc()).all()
+    return render_template('dashboard/messages.html', messages=messages)
+@app.route('/dashboard/messages/read/<int:id>', methods=['POST'])
+@login_required
+def read_message(id):
+    msg = Message.query.get_or_404(id)
+    msg.is_read = True
+    db.session.commit()
+    flash('Pesan ditandai telah dibaca.', 'success')
+    return redirect(url_for('manage_messages'))
+@app.route('/dashboard/messages/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_message(id):
+    msg = Message.query.get_or_404(id)
+    db.session.delete(msg)
+    db.session.commit()
+    flash('Pesan berhasil dihapus dari kotak masuk.', 'success')
+    return redirect(url_for('manage_messages'))
+
 if __name__ == '__main__':
     init_database()
     app.run(debug=True)

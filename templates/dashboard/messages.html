@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Kotak Masuk Pesan{% endblock %}
+{% block content %}
+<div class="container py-5 my-3">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <h2 class="fw-bold text-primary"><i class="bi bi-envelope-paper me-2 text-dark"></i> Kotak Masuk</h2>
+        <!-- Indikator jumlah pesan keseluruhan -->
+        <span class="badge bg-secondary rounded-pill px-3">{{ messages|length }} Pesan Total</span>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {% if messages %}
+                <!-- Menggunakan elemen Accordion Bootstrap untuk mendesain list pesan yang modern -->
+                <div class="accordion shadow-sm" id="accordionMessages">
+                    {% for msg in messages %}
+                    <div class="accordion-item border-0 border-bottom">
+                        <h2 class="accordion-header" id="heading{{ msg.id }}">
+                            <button class="accordion-button {% if not msg.is_read %}fw-bold text-primary bg-primary bg-opacity-10{% else %}collapsed bg-light{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ msg.id }}" aria-expanded="{% if not msg.is_read %}true{% else %}false{% endif %}" aria-controls="collapse{{ msg.id }}">
+                                <div class="d-flex w-100 justify-content-between align-items-center pe-3">
+                                    <div>
+                                        {% if not msg.is_read %}<span class="badge bg-danger me-2 shadow-sm">Baru</span>{% endif %}
+                                        {{ msg.subject }}
+                                        <span class="text-muted fw-normal ms-2 fst-italic d-none d-md-inline">- dari {{ msg.name }}</span>
+                                    </div>
+                                    <small class="text-muted fw-normal"><i class="bi bi-clock me-1"></i> {{ msg.created_at.strftime('%d %b %Y, %H:%M') }}</small>
+                                </div>
+                            </button>
+                        </h2>
+                        <!-- Biarkan pesan yang belum dibaca terbuka secara default (auto-expand) -->
+                        <div id="collapse{{ msg.id }}" class="accordion-collapse collapse {% if not msg.is_read %}show{% endif %}" aria-labelledby="heading{{ msg.id }}" data-bs-parent="#accordionMessages">
+                            <div class="accordion-body p-4 bg-white">
+                                <div class="d-flex justify-content-between border-bottom pb-3 mb-4">
+                                    <div>
+                                        <div class="text-muted small">Dikirim oleh:</div>
+                                        <strong>{{ msg.name }}</strong> &lt;<a href="mailto:{{ msg.email }}" class="text-decoration-none">{{ msg.email }}</a>&gt;
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-light rounded border-start border-4 border-primary mb-4" style="white-space: pre-wrap;">{{ msg.body }}</div>
+                                
+                                <div class="d-flex gap-2 align-items-center">
+                                    <!-- Tombol Balas Cerdas (otomatis membuka aplikasi email default) -->
+                                    <a href="mailto:{{ msg.email }}?subject=Re: {{ msg.subject }}" class="btn btn-primary btn-sm px-3 shadow-sm fw-semibold"><i class="bi bi-reply-fill me-1"></i> Balas Email</a>
+                                    
+                                    <!-- Tombol Tandai Sudah Dibaca (hanya muncul bila statusnya belum dibaca) -->
+                                    {% if not msg.is_read %}
+                                    <form action="{{ url_for('read_message', id=msg.id) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-success btn-sm px-3 shadow-sm fw-semibold"><i class="bi bi-check2-all me-1"></i> Tandai Dibaca</button>
+                                    </form>
+                                    {% endif %}
+                                    
+                                    <!-- Tombol Hapus Pesan -->
+                                    <form action="{{ url_for('delete_message', id=msg.id) }}" method="POST" class="d-inline ms-auto" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pesan dari {{ msg.name }} secara permanen?');">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm px-3"><i class="bi bi-trash"></i> Hapus Pesan</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="card shadow-sm border-0 text-center py-5">
+                    <div class="card-body text-muted">
+                        <i class="bi bi-inbox fs-1 d-block mb-3 text-secondary opacity-50"></i>
+                        <h5 class="fw-normal">Kotak Masuk Kosong</h5>
+                        <p>Belum ada yang mengirim pesan melalui formulir kontak portofolio Anda.</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
