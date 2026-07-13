@@ -148,6 +148,74 @@ def dashboard():
                            unread_messages=unread_messages,
                            total_skills=total_skills)
 
+# =============================================================
+# Route CRUD Project (Tahap 7)
+# =============================================================
+@app.route('/dashboard/projects')
+@login_required
+def manage_projects():
+    # Menampilkan daftar project, diurutkan dari yang terbaru
+    projects = Project.query.order_by(Project.created_at.desc()).all()
+    return render_template('dashboard/projects.html', projects=projects)
+@app.route('/dashboard/projects/add', methods=['GET', 'POST'])
+@login_required
+def add_project():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        description = request.form.get('description')
+        technology = request.form.get('technology')
+        link = request.form.get('link')
+        
+        # Validasi dasar
+        if not title or not description:
+            flash('Judul dan Deskripsi wajib diisi!', 'danger')
+        else:
+            new_project = Project(
+                title=title,
+                description=description,
+                technology=technology,
+                link=link
+            )
+            # Logika upload gambar akan diimplementasikan pada Tahap 8
+            
+            db.session.add(new_project)
+            db.session.commit()
+            flash('Project baru berhasil ditambahkan!', 'success')
+            return redirect(url_for('manage_projects'))
+            
+    return render_template('dashboard/add_project.html')
+@app.route('/dashboard/projects/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_project(id):
+    project = Project.query.get_or_404(id)
+    
+    if request.method == 'POST':
+        project.title = request.form.get('title')
+        project.description = request.form.get('description')
+        project.technology = request.form.get('technology')
+        project.link = request.form.get('link')
+        
+        # Logika edit gambar akan diimplementasikan pada Tahap 8
+        
+        if not project.title or not project.description:
+            flash('Judul dan Deskripsi wajib diisi!', 'danger')
+        else:
+            db.session.commit()
+            flash('Project berhasil diperbarui!', 'success')
+            return redirect(url_for('manage_projects'))
+            
+    return render_template('dashboard/edit_project.html', project=project)
+@app.route('/dashboard/projects/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_project(id):
+    project = Project.query.get_or_404(id)
+    # Logika hapus file gambar akan ditambahkan pada Tahap 8
+    
+    db.session.delete(project)
+    db.session.commit()
+    flash('Project berhasil dihapus.', 'success')
+    return redirect(url_for('manage_projects'))
+
 if __name__ == '__main__':
     init_database()
     app.run(debug=True)

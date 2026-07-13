@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Kelola Project{% endblock %}
+{% block content %}
+<div class="container py-5 my-3">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <h2 class="fw-bold text-primary"><i class="bi bi-folder2-open me-2 text-dark"></i> Kelola Project</h2>
+        <a href="{{ url_for('add_project') }}" class="btn btn-primary shadow-sm fw-semibold">
+            <i class="bi bi-plus-lg me-1"></i> Tambah Project
+        </a>
+    </div>
+
+    <!-- Table -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0 table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="px-4 py-3 text-secondary">No</th>
+                        <th class="py-3 text-secondary">Judul Project</th>
+                        <th class="py-3 text-secondary">Teknologi</th>
+                        <th class="py-3 text-secondary">Tanggal Ditambahkan</th>
+                        <th class="px-4 py-3 text-end text-secondary">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in projects %}
+                    <tr>
+                        <td class="px-4">{{ loop.index }}</td>
+                        <td class="fw-semibold text-dark">{{ p.title }}</td>
+                        <td>
+                            {% if p.technology %}
+                            <span class="badge bg-light text-dark border">{{ p.technology }}</span>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ p.created_at.strftime('%d %b %Y') }}</td>
+                        <td class="px-4 text-end">
+                            <a href="{{ url_for('project_detail', id=p.id) }}" target="_blank" class="btn btn-sm btn-info text-white me-1 shadow-sm" title="Lihat di halaman publik">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{{ url_for('edit_project', id=p.id) }}" class="btn btn-sm btn-warning text-white me-1 shadow-sm" title="Edit Data">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <!-- Tombol Hapus harus menggunakan form untuk keamanan (mencegah hapus tidak sengaja via link GET) -->
+                            <form action="{{ url_for('delete_project', id=p.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Peringatan: Apakah Anda yakin ingin menghapus project ini secara permanen?');">
+                                <button type="submit" class="btn btn-sm btn-danger shadow-sm" title="Hapus">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-2 d-block mb-3"></i>
+                            Data project masih kosong. Silakan klik "Tambah Project".
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
