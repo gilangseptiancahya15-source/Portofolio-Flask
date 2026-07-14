@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Navbar Sesuai Referensi, Teks Asli -->
@@ -24,60 +26,124 @@
                 <ul class="navbar-nav ms-auto">
                     <!-- Navigasi Asli -->
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">Home</a>
+                        <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}"
+                            href="{{ url_for('index') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'about' %}active{% endif %}" href="{{ url_for('about') }}">About</a>
+                        <a class="nav-link {% if request.endpoint == 'about' %}active{% endif %}"
+                            href="{{ url_for('about') }}">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'portfolio' %}active{% endif %}" href="{{ url_for('portfolio') }}">Portfolio</a>
+                        <a class="nav-link {% if request.endpoint == 'portfolio' %}active{% endif %}"
+                            href="{{ url_for('portfolio') }}">Portfolio</a>
                     </li>
                     <li class="nav-item me-lg-3">
-                        <a class="nav-link {% if request.endpoint == 'contact' %}active{% endif %}" href="{{ url_for('contact') }}">Contact</a>
+                        <a class="nav-link {% if request.endpoint == 'contact' %}active{% endif %}"
+                            href="{{ url_for('contact') }}">Contact</a>
                     </li>
                 </ul>
-                
+
                 <ul class="navbar-nav">
                     {% if not session.get('admin_id') %}
                     <!-- Tombol Login (Sesuai Referensi transparan) -->
                     <li class="nav-item dropdown mt-3 mt-lg-0">
-                        <a class="btn btn-outline-secondary px-4 dropdown-toggle" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <a class="btn btn-outline-secondary px-4 dropdown-toggle" href="#" id="loginDropdown"
+                            role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                             <i class="bi bi-box-arrow-in-right me-1 d-none d-lg-inline"></i> Login
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end shadow p-4 mt-2 login-dropdown" style="width: 280px;" aria-labelledby="loginDropdown">
-                            <h6 class="fw-bold mb-3 text-center" style="font-family: 'Inter', sans-serif;">Masuk Dashboard</h6>
+                        <div class="dropdown-menu dropdown-menu-end shadow p-4 mt-2 login-dropdown"
+                            style="width: 280px;" aria-labelledby="loginDropdown">
+                            <h6 class="fw-bold mb-3 text-center" style="font-family: 'Inter', sans-serif;">Masuk
+                                Dashboard</h6>
                             <form action="{{ url_for('login') }}" method="POST">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold small">Username</label>
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-text border-end-0"><i class="bi bi-person"></i></span>
-                                        <input type="text" class="form-control border-start-0" name="username" placeholder="Masukkan username" required>
+                                        <input type="text" class="form-control border-start-0" name="username"
+                                            placeholder="Masukkan username" required>
                                     </div>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-semibold small">Password</label>
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-text border-end-0"><i class="bi bi-lock"></i></span>
-                                        <input type="password" class="form-control border-start-0" name="password" placeholder="Masukkan password" required>
+                                        <input type="password" class="form-control border-start-0" name="password"
+                                            placeholder="Masukkan password" required>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm w-100 py-2"><i class="bi bi-box-arrow-in-right me-1"></i> Login</button>
+                                <button type="submit" class="btn btn-primary btn-sm w-100 py-2"><i
+                                        class="bi bi-box-arrow-in-right me-1"></i> Login</button>
                             </form>
                         </div>
                     </li>
                     {% else %}
                     <!-- Menu Admin -->
-                    <li class="nav-item dropdown mt-3 mt-lg-0">
-                        <a class="btn btn-primary px-4 dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle me-1 d-none d-lg-inline"></i> Admin Panel
+                    <li class="nav-item dropdown mt-3 mt-lg-0 ms-lg-2">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 py-1 px-2 rounded-pill" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main);">
+                            <!-- Notification icon placeholder -->
+                            <div class="d-flex align-items-center justify-content-center rounded-circle border border-secondary text-muted" style="width: 32px; height: 32px;">
+                                <i class="bi bi-bell"></i>
+                            </div>
+                            <!-- Avatar -->
+                            {% if user and user.photo %}
+                            <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="Avatar" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;">
+                            {% else %}
+                            <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 32px; height: 32px; background-color: var(--accent-glow); color: var(--accent-primary);">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            {% endif %}
+                            <!-- Name & Role -->
+                            <div class="d-flex flex-column d-none d-lg-flex me-2 text-start" style="line-height: 1.2;">
+                                <span class="fw-semibold" style="font-size: 0.85rem;">{{ user.name if user else 'Admin' }}</span>
+                                <span class="text-muted" style="font-size: 0.7rem;">Administrator</span>
+                            </div>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow dropdown-menu-dark-luxury mt-2" aria-labelledby="adminDropdown">
-                            <li><a class="dropdown-item {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
-                            <li><a class="dropdown-item {% if request.endpoint == 'manage_projects' or request.endpoint == 'add_project' or request.endpoint == 'edit_project' %}active{% endif %}" href="{{ url_for('manage_projects') }}"><i class="bi bi-folder2-open me-2"></i> Kelola Project</a></li>
-                            <li><a class="dropdown-item {% if request.endpoint == 'manage_profile' %}active{% endif %}" href="{{ url_for('manage_profile') }}"><i class="bi bi-person-lines-fill me-2"></i> Profil & Skill</a></li>
-                            <li><a class="dropdown-item {% if request.endpoint == 'manage_messages' %}active{% endif %}" href="{{ url_for('manage_messages') }}"><i class="bi bi-envelope-paper me-2"></i> Kotak Pesan</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                        
+                        <ul class="dropdown-menu dropdown-menu-end shadow mt-2 p-2 dropdown-menu-dark-luxury" aria-labelledby="adminDropdown" style="min-width: 250px; border-radius: 12px;">
+                            <li class="px-3 py-2 text-muted small fw-semibold">Admin Menu</li>
+                            
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-3 py-2 rounded mb-1 {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">
+                                    <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-dark" style="width: 32px; height: 32px;">
+                                        <i class="bi bi-speedometer2"></i>
+                                    </div>
+                                    <span class="fw-medium" style="font-size: 0.95rem;">Dashboard</span>
+                                    <span class="badge bg-secondary ms-auto rounded-pill" style="font-size: 0.7rem;">Admin</span>
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-3 py-2 rounded mb-1 {% if request.endpoint == 'manage_projects' or request.endpoint == 'add_project' or request.endpoint == 'edit_project' %}active{% endif %}" href="{{ url_for('manage_projects') }}">
+                                    <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 32px; height: 32px; background-color: rgba(255,255,255,0.05);">
+                                        <i class="bi bi-plus-lg text-muted"></i>
+                                    </div>
+                                    <span class="fw-medium" style="font-size: 0.95rem;">Kelola Project</span>
+                                </a>
+                            </li>
+                            
+                            <li><hr class="dropdown-divider my-2"></li>
+                            
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-3 py-2 rounded mb-1 {% if request.endpoint == 'manage_profile' %}active{% endif %}" href="{{ url_for('manage_profile') }}">
+                                    <i class="bi bi-person text-muted" style="font-size: 1.2rem; width: 32px; text-align: center;"></i>
+                                    <span class="fw-medium" style="font-size: 0.95rem;">Profil & Skill</span>
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-3 py-2 rounded mb-1 {% if request.endpoint == 'manage_messages' %}active{% endif %}" href="{{ url_for('manage_messages') }}">
+                                    <i class="bi bi-envelope text-muted" style="font-size: 1.2rem; width: 32px; text-align: center;"></i>
+                                    <span class="fw-medium" style="font-size: 0.95rem;">Kotak Pesan</span>
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-3 py-2 rounded text-danger mt-1" href="{{ url_for('logout') }}">
+                                    <i class="bi bi-box-arrow-right text-danger" style="font-size: 1.2rem; width: 32px; text-align: center;"></i>
+                                    <span class="fw-medium" style="font-size: 0.95rem;">Logout</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     {% endif %}
@@ -88,14 +154,14 @@
 
     <div class="container mt-5 pt-5">
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
         {% endwith %}
     </div>
 
@@ -107,7 +173,8 @@
     <!-- Footer -->
     <footer class="py-4 mt-auto" style="background-color: var(--bg-card); border-top: 1px solid var(--border-color);">
         <div class="container text-center">
-            <p class="mb-0 text-muted">&copy; {{ user.created_at.year if user else 2026 }} {{ user.name }}. All rights reserved.</p>
+            <p class="mb-0 text-muted">&copy; {{ user.created_at.year if user else 2026 }} {{ user.name }}. All rights
+                reserved.</p>
         </div>
     </footer>
 
@@ -115,4 +182,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
+
 </html>

@@ -15,9 +15,9 @@
     --primary: #FFFFFF;
     --primary-text: #000000;
     
-    /* Warna Emas murni untuk aksen garis geometris */
-    --accent-gold: #c5a059;
-    --accent-gold-glow: rgba(197, 160, 89, 0.3);
+    /* Warna aksen utama (Indigo modern pengganti emas) */
+    --accent-primary: #6366f1;
+    --accent-glow: rgba(99, 102, 241, 0.3);
     
     --text-main: #FAFAFA;
     --text-muted: #9CA3AF;
@@ -41,12 +41,12 @@ a {
 }
 
 a:hover {
-    color: var(--accent-gold);
+    color: var(--accent-primary);
 }
 
 /* ---- Override Bootstrap Primary (Sesuai Referensi) ---- */
 .text-primary {
-    color: var(--accent-gold) !important;
+    color: var(--accent-primary) !important;
 }
 
 /* Tombol Solid (Sign Up / Contact Us) -> Putih, Teks Hitam, Pill */
@@ -141,10 +141,10 @@ a:hover {
     right: -100px;
     width: 600px;
     height: 600px;
-    border: 2px solid var(--accent-gold);
+    border: 2px solid var(--accent-primary);
     transform: rotate(45deg);
     opacity: 0.8;
-    box-shadow: 0 0 30px var(--accent-gold-glow), inset 0 0 30px var(--accent-gold-glow);
+    box-shadow: 0 0 30px var(--accent-glow), inset 0 0 30px var(--accent-glow);
     z-index: 0;
 }
 
@@ -155,10 +155,10 @@ a:hover {
     right: 200px;
     width: 500px;
     height: 500px;
-    border: 2px solid var(--accent-gold);
+    border: 2px solid var(--accent-primary);
     transform: rotate(45deg);
     opacity: 0.5;
-    box-shadow: 0 0 20px var(--accent-gold-glow), inset 0 0 20px var(--accent-gold-glow);
+    box-shadow: 0 0 20px var(--accent-glow), inset 0 0 20px var(--accent-glow);
     z-index: 0;
 }
 
@@ -204,7 +204,7 @@ a:hover {
 }
 .form-control:focus {
     background-color: #000000;
-    border-color: var(--accent-gold);
+    border-color: var(--accent-primary);
     color: var(--text-main);
     box-shadow: none;
 }
@@ -221,7 +221,7 @@ a:hover {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
     opacity: 0.5;
 }
 
@@ -229,11 +229,11 @@ a:hover {
     width: 60px;
     height: 60px;
     border-radius: 12px;
-    background: rgba(197, 160, 89, 0.1);
+    background: rgba(99, 102, 241, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent-gold);
+    color: var(--accent-primary);
 }
 
 /* Tabel */

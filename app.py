@@ -80,15 +80,14 @@ def contact():
     if request.method == 'POST':
         name = request.form.get('name', '')
         email = request.form.get('email', '')
-        subject = request.form.get('subject', '')
         body = request.form.get('body', '')
         
         # Validasi Input: Pastikan tidak ada spasi kosong saja
-        if not name.strip() or not email.strip() or not subject.strip() or not body.strip():
+        if not name.strip() or not email.strip() or not body.strip():
             flash('Semua field wajib diisi dengan benar!', 'danger')
         else:
             # Simpan pesan ke database
-            pesan_baru = Message(name=name, email=email, subject=subject, body=body)
+            pesan_baru = Message(name=name, email=email, subject='-', body=body)
             db.session.add(pesan_baru)
             db.session.commit()
             

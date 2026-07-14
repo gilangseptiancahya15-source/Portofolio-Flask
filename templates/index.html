@@ -62,7 +62,7 @@
                         <p class="card-text mb-4" style="font-size: 0.9rem;">{{ project.description[:100] }}...</p>
                         <!-- Tombol ditaruh di paling bawah card -->
                         <a href="{{ url_for('project_detail', id=project.id) }}"
-                            class="text-decoration-none mt-auto" style="color: var(--accent-gold); font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase;">Detail Project <i class="bi bi-arrow-right ms-1"></i></a>
+                            class="text-decoration-none mt-auto" style="color: var(--accent-primary); font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase;">Detail Project <i class="bi bi-arrow-right ms-1"></i></a>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@
         </div>
 
         <div class="text-center mt-5">
-            <a href="{{ url_for('portfolio') }}" class="text-decoration-none fw-bold" style="color: var(--accent-gold);">Lihat Semua Project
+            <a href="{{ url_for('portfolio') }}" class="text-decoration-none fw-bold" style="color: var(--accent-primary);">Lihat Semua Project
                 <i class="bi bi-arrow-right"></i></a>
         </div>
 
