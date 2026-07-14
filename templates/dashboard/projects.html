@@ -4,8 +4,8 @@
 <div class="container py-5 my-3">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-        <h2 class="fw-bold text-primary"><i class="bi bi-folder2-open me-2 text-dark"></i> Kelola Project</h2>
-        <a href="{{ url_for('add_project') }}" class="btn btn-primary shadow-sm fw-semibold">
+        <h2 class="fw-bold text-primary"><i class="bi bi-folder2-open me-2 text-primary"></i> Kelola Project</h2>
+        <a href="{{ url_for('add_project') }}" class="btn btn-primary shadow-sm fw-semibold text-dark">
             <i class="bi bi-plus-lg me-1"></i> Tambah Project
         </a>
     </div>
@@ -16,36 +16,35 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th class="px-4 py-3 text-secondary">No</th>
-                        <th class="py-3 text-secondary">Judul Project</th>
-                        <th class="py-3 text-secondary">Teknologi</th>
-                        <th class="py-3 text-secondary">Tanggal Ditambahkan</th>
-                        <th class="px-4 py-3 text-end text-secondary">Aksi</th>
+                        <th class="px-4 py-3">No</th>
+                        <th class="py-3">Judul Project</th>
+                        <th class="py-3">Teknologi</th>
+                        <th class="py-3">Tanggal Ditambahkan</th>
+                        <th class="px-4 py-3 text-end">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for p in projects %}
                     <tr>
                         <td class="px-4">{{ loop.index }}</td>
-                        <td class="fw-semibold text-dark">{{ p.title }}</td>
+                        <td class="fw-semibold">{{ p.title }}</td>
                         <td>
                             {% if p.technology %}
-                            <span class="badge bg-light text-dark border">{{ p.technology }}</span>
+                            <span class="badge bg-light text-muted border">{{ p.technology }}</span>
                             {% else %}
                             <span class="text-muted">-</span>
                             {% endif %}
                         </td>
-                        <td>{{ p.created_at.strftime('%d %b %Y') }}</td>
+                        <td class="text-muted">{{ p.created_at.strftime('%d %b %Y') }}</td>
                         <td class="px-4 text-end">
-                            <a href="{{ url_for('project_detail', id=p.id) }}" target="_blank" class="btn btn-sm btn-info text-white me-1 shadow-sm" title="Lihat di halaman publik">
+                            <a href="{{ url_for('project_detail', id=p.id) }}" target="_blank" class="btn btn-sm btn-outline-info me-1 shadow-sm" title="Lihat di halaman publik">
                                 <i class="bi bi-eye"></i>
                             </a>
-                            <a href="{{ url_for('edit_project', id=p.id) }}" class="btn btn-sm btn-warning text-white me-1 shadow-sm" title="Edit Data">
+                            <a href="{{ url_for('edit_project', id=p.id) }}" class="btn btn-sm btn-outline-warning me-1 shadow-sm" title="Edit Data">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
-                            <!-- Tombol Hapus harus menggunakan form untuk keamanan (mencegah hapus tidak sengaja via link GET) -->
                             <form action="{{ url_for('delete_project', id=p.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Peringatan: Apakah Anda yakin ingin menghapus project ini secara permanen?');">
-                                <button type="submit" class="btn btn-sm btn-danger shadow-sm" title="Hapus">
+                                <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm" title="Hapus">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>

@@ -3,104 +3,86 @@
 {% block title %}Dashboard Admin{% endblock %}
 
 {% block content %}
-<div class="container py-5 my-3">
-    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-        <h2 class="fw-bold text-primary"><i class="bi bi-speedometer2 me-2 text-dark"></i> Dashboard Utama</h2>
-        <span class="text-muted d-none d-sm-inline">Selamat datang kembali, <strong>{{ user.name }}</strong></span>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-normal text-white mb-1">Dashboard</h2>
+            <p class="text-muted mb-0 small">Welcome back, {{ user.name }}</p>
+        </div>
     </div>
 
-    <!-- Statistik Cards (Tiga Kartu Berwarna) -->
+    <!-- Statistik Cards (Modern Minimalist) -->
     <div class="row g-4 mb-5">
         
-        <!-- Total Projects Card -->
+        <!-- Total Projects -->
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-primary text-white h-100">
-                <div class="card-body p-4 d-flex align-items-center justify-content-between">
-                    <div>
-                        <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Total Project</h6>
-                        <h2 class="display-5 fw-bold mb-0">{{ total_projects }}</h2>
+            <div class="card stat-card h-100 p-4">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="stat-icon-wrapper">
+                        <i class="bi bi-folder2-open fs-3"></i>
                     </div>
-                    <div>
-                        <i class="bi bi-folder2-open opacity-50" style="font-size: 4rem;"></i>
+                    <div class="dropdown">
+                        <a href="{{ url_for('manage_projects') }}" class="text-muted"><i class="bi bi-three-dots-vertical"></i></a>
                     </div>
                 </div>
-                 <!-- Card Footer untuk Navigasi -->
-                <div class="card-footer bg-transparent border-top border-light border-opacity-25 p-0">
-                    <a href="{{ url_for('manage_projects') }}" class="btn btn-link text-white text-decoration-none w-100 text-start py-2 px-4 d-flex justify-content-between align-items-center">
-                        <span>Kelola Project</span>
-                        <i class="bi bi-arrow-right-circle"></i>
-                    </a>
-                </div>
+                <h2 class="display-5 fw-normal text-white mb-1">{{ total_projects }}</h2>
+                <p class="text-muted mb-0 small text-uppercase letter-spacing-1">Total Projects</p>
             </div>
         </div>
 
-        <!-- Pesan Baru Card (Otomatis berubah merah jika ada pesan baru) -->
+        <!-- Unread Messages -->
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 {% if unread_messages > 0 %}bg-danger{% else %}bg-success{% endif %} text-white h-100">
-                <div class="card-body p-4 d-flex align-items-center justify-content-between">
-                    <div>
-                        <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Pesan Belum Dibaca</h6>
-                        <h2 class="display-5 fw-bold mb-0">{{ unread_messages }}</h2>
+            <div class="card stat-card h-100 p-4" style="{% if unread_messages > 0 %}border-color: rgba(255, 68, 68, 0.4);{% endif %}">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="stat-icon-wrapper" style="{% if unread_messages > 0 %}color: #ff4444; background: rgba(255, 68, 68, 0.1);{% endif %}">
+                        <i class="bi bi-envelope fs-3"></i>
                     </div>
-                    <div>
-                        <i class="bi bi-envelope-paper opacity-50" style="font-size: 4rem;"></i>
+                    <div class="dropdown">
+                        <a href="{{ url_for('manage_messages') }}" class="text-muted"><i class="bi bi-three-dots-vertical"></i></a>
                     </div>
                 </div>
-                <div class="card-footer bg-transparent border-top border-light border-opacity-25 p-0">
-                    <a href="{{ url_for('manage_messages') }}" class="btn btn-link text-white text-decoration-none w-100 text-start py-2 px-4 d-flex justify-content-between align-items-center">
-                        <span>Lihat Kotak Masuk</span>
-                        <i class="bi bi-arrow-right-circle"></i>
-                    </a>
-                </div>
+                <h2 class="display-5 fw-normal text-white mb-1">{{ unread_messages }}</h2>
+                <p class="text-muted mb-0 small text-uppercase letter-spacing-1">Unread Messages</p>
             </div>
         </div>
 
-        <!-- Total Skills Card -->
+        <!-- Total Skills -->
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-secondary text-white h-100">
-                <div class="card-body p-4 d-flex align-items-center justify-content-between">
-                    <div>
-                        <h6 class="text-white-50 text-uppercase fw-semibold mb-1">Total Keahlian</h6>
-                        <h2 class="display-5 fw-bold mb-0">{{ total_skills }}</h2>
+            <div class="card stat-card h-100 p-4">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="stat-icon-wrapper">
+                        <i class="bi bi-lightning fs-3"></i>
                     </div>
-                    <div>
-                        <i class="bi bi-lightning-charge opacity-50" style="font-size: 4rem;"></i>
+                    <div class="dropdown">
+                        <a href="{{ url_for('manage_profile') }}" class="text-muted"><i class="bi bi-three-dots-vertical"></i></a>
                     </div>
                 </div>
-                <div class="card-footer bg-transparent border-top border-light border-opacity-25 p-0">
-                    <a href="{{ url_for('manage_profile') }}" class="btn btn-link text-white text-decoration-none w-100 text-start py-2 px-4 d-flex justify-content-between align-items-center">
-                        <span>Kelola Profil & Skill</span>
-                        <i class="bi bi-arrow-right-circle"></i>
-                    </a>
-                </div>
+                <h2 class="display-5 fw-normal text-white mb-1">{{ total_skills }}</h2>
+                <p class="text-muted mb-0 small text-uppercase letter-spacing-1">Total Skills</p>
             </div>
         </div>
         
     </div>
     
-    <!-- Informasi Sistem (Statik/Informasional) -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white py-3 fw-bold">
-                    <i class="bi bi-info-circle text-primary me-2"></i> Informasi Sistem
+    <!-- Quick Actions & Info -->
+    <div class="row g-4">
+        <div class="col-md-8">
+            <div class="card h-100 border-0" style="background: transparent;">
+                <h5 class="fw-normal text-white mb-4">Quick Actions</h5>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('add_project') }}" class="btn btn-primary"><i class="bi bi-plus me-2"></i>New Project</a>
+                    <a href="{{ url_for('manage_profile') }}" class="btn btn-outline-secondary"><i class="bi bi-person me-2"></i>Edit Profile</a>
                 </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            Status Aplikasi
-                            <span class="badge bg-success rounded-pill px-3 py-2">Berjalan Normal</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            Pengguna Aktif
-                            <span class="text-muted fw-semibold">@{{ user.username }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            Framework Basis
-                            <span class="text-muted">Flask 3.1.1 (Python)</span>
-                        </li>
-                    </ul>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card p-4">
+                <h6 class="fw-normal text-white mb-3">System Status</h6>
+                <div class="d-flex align-items-center mb-3">
+                    <div style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 10px #22c55e;" class="me-3"></div>
+                    <span class="text-muted small">All systems operational</span>
                 </div>
+                <div class="text-muted small">Version: Flask 3.1.1</div>
             </div>
         </div>
     </div>

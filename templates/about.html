@@ -9,17 +9,17 @@
         <div class="col-md-4 text-center mb-4 mb-md-0">
             <!-- Foto Profil (Bisa diganti di dashboard) -->
             {% if user.photo %}
-            <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="{{ user.name }}" class="img-fluid rounded-circle shadow" style="width: 250px; height: 250px; object-fit: cover;">
+            <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="{{ user.name }}" class="img-fluid rounded-circle shadow" style="width: 250px; height: 250px; object-fit: cover; border: 3px solid var(--primary);">
             {% else %}
-            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center shadow mx-auto" style="width: 250px; height: 250px;">
-                <i class="bi bi-person" style="font-size: 6rem;"></i>
+            <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 250px; height: 250px; background-color: var(--bg-card); border: 2px solid var(--border-color);">
+                <i class="bi bi-person" style="font-size: 6rem; color: var(--text-muted);"></i>
             </div>
             {% endif %}
         </div>
         <div class="col-md-8 px-md-4">
-            <h2 class="fw-bold mb-3">Tentang Saya</h2>
+            <h2 class="fw-bold mb-3">Tentang <span class="text-primary">Saya</span></h2>
             <!-- Menampilkan Biografi lengkap dengan whitespace yang terjaga (pre-wrap) -->
-            <p class="lead text-muted" style="white-space: pre-wrap;">{{ user.bio }}</p>
+            <p class="lead" style="white-space: pre-wrap; color: var(--text-muted);">{{ user.bio }}</p>
             
             <div class="row mt-4">
                 <div class="col-sm-6 mb-2">
@@ -44,10 +44,10 @@
         </div>
     </div>
     
-    <!-- Bagian Keahlian (Skills) dengan Progress Bar Bootstrap -->
+    <!-- Bagian Keahlian (Skills) dengan Progress Bar -->
     <div class="row">
         <div class="col-12">
-            <h3 class="fw-bold text-center mb-5">Keahlian & Teknologi</h3>
+            <h3 class="fw-bold text-center mb-5">Keahlian & <span class="text-primary">Teknologi</span></h3>
             <div class="row g-4">
                 {% if skills %}
                     {% for skill in skills %}
@@ -56,8 +56,8 @@
                             <span>{{ skill.name }}</span>
                             <span class="text-muted">{{ skill.level }}%</span>
                         </div>
-                        <div class="progress shadow-sm">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ skill.level }}%" aria-valuenow="{{ skill.level }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ skill.level }}%" aria-valuenow="{{ skill.level }}" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
                     {% endfor %}

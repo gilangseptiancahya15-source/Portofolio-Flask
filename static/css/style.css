@@ -1,71 +1,250 @@
 /* =============================================================
-   style.css - Custom Stylesheet
+   style.css - Dark Luxury Theme (Sesuai Referensi)
    ============================================================= */
 
-   body {
-    background-color: #F8F9FA;
-    color: #212529;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Google Fonts - Playfair Display untuk Heading (Elegan/Mewah), Inter untuk Teks */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+/* ---- CSS Variables ---- */
+:root {
+    --bg-dark: #050505;
+    --bg-card: #0c0c0c;
+    --bg-card-hover: #151515;
+    
+    /* Tombol dan Teks Utama sesuai referensi (Putih & Transparan) */
+    --primary: #FFFFFF;
+    --primary-text: #000000;
+    
+    /* Warna Emas murni untuk aksen garis geometris */
+    --accent-gold: #c5a059;
+    --accent-gold-glow: rgba(197, 160, 89, 0.3);
+    
+    --text-main: #FAFAFA;
+    --text-muted: #9CA3AF;
+    --border-color: #222222;
 }
 
-/* Konfigurasi Warna Utama (Clean & Modern) */
+/* ---- Base ---- */
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand, .font-serif {
+    font-family: 'Playfair Display', serif;
+}
+
+a {
+    color: var(--primary);
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent-gold);
+}
+
+/* ---- Override Bootstrap Primary (Sesuai Referensi) ---- */
 .text-primary {
-    color: #4A90D9 !important;
+    color: var(--accent-gold) !important;
 }
 
-.bg-primary {
-    background-color: #4A90D9 !important;
-}
-
+/* Tombol Solid (Sign Up / Contact Us) -> Putih, Teks Hitam, Pill */
 .btn-primary {
-    background-color: #4A90D9;
-    border-color: #4A90D9;
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-text);
+    font-weight: 500;
+    border-radius: 50px;
+    padding: 0.6rem 1.5rem;
+    transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-    background-color: #3b73ad;
-    border-color: #3b73ad;
+    background-color: #e0e0e0;
+    border-color: #e0e0e0;
+    color: var(--primary-text);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }
 
-.btn-outline-primary {
-    color: #4A90D9;
-    border-color: #4A90D9;
-}
-
-.btn-outline-primary:hover {
-    background-color: #4A90D9;
-    color: white;
-}
-
-/* Efek Card Project */
-.card {
-    border: none;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Interaktivitas animasi card di hover */
-.project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-}
-
-/* Kostumisasi Progress Bar */
-.progress {
-    height: 8px;
-    border-radius: 4px;
-    background-color: #e9ecef;
-}
-
-.skill-name {
+/* Tombol Outline (Login / Learn More) -> Transparan, Border Putih, Teks Putih, Pill */
+.btn-outline-secondary, .btn-outline-primary {
+    background-color: transparent;
+    border-color: var(--primary);
+    color: var(--primary);
     font-weight: 500;
-    margin-bottom: 5px;
-    font-size: 0.95rem;
+    border-radius: 50px;
+    padding: 0.6rem 1.5rem;
+    transition: all 0.3s ease;
 }
 
-/* Bagian Hero (Background landing page) */
-.hero-section {
-    background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
-    padding: 100px 0;
-    border-bottom: 1px solid #e9ecef;
+.btn-outline-secondary:hover, .btn-outline-primary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
 }
+
+/* ---- Navbar (Dark) ---- */
+.navbar-dark-luxury {
+    background: transparent !important;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    padding: 1.5rem 0;
+}
+
+.navbar-dark-luxury .navbar-brand {
+    color: var(--primary) !important;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    font-size: 1.5rem;
+}
+
+.navbar-dark-luxury .nav-link {
+    color: var(--primary) !important;
+    font-weight: 400;
+    font-size: 0.95rem;
+    margin: 0 0.5rem;
+    transition: opacity 0.3s ease;
+}
+
+.navbar-dark-luxury .nav-link:hover,
+.navbar-dark-luxury .nav-link.active {
+    opacity: 0.7;
+}
+
+/* Dropdown */
+.dropdown-menu-dark-luxury, .login-dropdown {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+.dropdown-menu-dark-luxury .dropdown-item { color: var(--text-muted); }
+.dropdown-menu-dark-luxury .dropdown-item:hover { background-color: var(--border-color); color: var(--primary); }
+
+/* ---- Hero Section (Hitam dengan Garis Emas Sesuai Referensi) ---- */
+.hero-section {
+    background-color: var(--bg-dark);
+    padding: 160px 0 100px 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 80vh;
+}
+
+/* Garis Geometris Emas (Diamond) */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -150px;
+    right: -100px;
+    width: 600px;
+    height: 600px;
+    border: 2px solid var(--accent-gold);
+    transform: rotate(45deg);
+    opacity: 0.8;
+    box-shadow: 0 0 30px var(--accent-gold-glow), inset 0 0 30px var(--accent-gold-glow);
+    z-index: 0;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: 250px;
+    right: 200px;
+    width: 500px;
+    height: 500px;
+    border: 2px solid var(--accent-gold);
+    transform: rotate(45deg);
+    opacity: 0.5;
+    box-shadow: 0 0 20px var(--accent-gold-glow), inset 0 0 20px var(--accent-gold-glow);
+    z-index: 0;
+}
+
+/* Partikel Cahaya (Glow spots) */
+.sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.4);
+    z-index: 1;
+}
+
+/* ---- Card (Sleek Modern Dashboard) ---- */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card-title, .card-header {
+    color: var(--text-main);
+    background-color: transparent !important;
+}
+
+.card-text, .text-muted {
+    color: var(--text-muted) !important;
+}
+
+.card-footer {
+    background-color: transparent !important;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ---- Form Controls ---- */
+.form-control, .form-select, .input-group-text {
+    background-color: #000000;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 8px;
+}
+.form-control:focus {
+    background-color: #000000;
+    border-color: var(--accent-gold);
+    color: var(--text-main);
+    box-shadow: none;
+}
+
+/* ---- Modern Dashboard Stats ---- */
+.stat-card {
+    background: linear-gradient(145deg, #0a0a0a 0%, #111111 100%);
+    border: 1px solid #222;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+    opacity: 0.5;
+}
+
+.stat-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: rgba(197, 160, 89, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-gold);
+}
+
+/* Tabel */
+.table { color: var(--text-main); --bs-table-bg: transparent; }
+.table thead { border-bottom: 1px solid var(--border-color); }
+.table-light { --bs-table-bg: #111 !important; --bs-table-color: var(--text-muted) !important; }
+.table td, .table th { border-color: var(--border-color); }
+
+/* Utility */
+.border-bottom, .border-top, .border-start, .border-end, .border {
+    border-color: var(--border-color) !important;
+}
+.bg-light { background-color: #0a0a0a !important; }
+.bg-white { background-color: var(--bg-card) !important; }

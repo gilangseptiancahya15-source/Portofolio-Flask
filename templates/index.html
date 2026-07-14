@@ -3,49 +3,66 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section text-center d-flex align-items-center">
-    <div class="container">
-        <!-- Menyapa pengunjung dengan nama admin yang diambil dari database -->
-        <h1 class="display-4 fw-bold">Halo, Saya <span class="text-primary">{{ user.name }}</span></h1>
-        <p class="lead mt-3 text-muted mx-auto" style="max-width: 650px;">
-            {{ user.bio }}
-        </p>
-        <div class="mt-4">
-            <a href="{{ url_for('portfolio') }}" class="btn btn-primary btn-lg me-2 shadow-sm">Lihat Project</a>
-            <a href="{{ url_for('contact') }}" class="btn btn-outline-secondary btn-lg shadow-sm">Hubungi Saya</a>
+<!-- Hero Section (Hitam Pekat dengan Geometris Emas) -->
+<section class="hero-section d-flex align-items-center">
+    <div class="container position-relative" style="z-index: 2;">
+        
+        <!-- Bintang Sparkle persis referensi -->
+        <div class="sparkle d-none d-md-block" style="top: 0px; left: 10%; animation-delay: 0s;"></div>
+        <div class="sparkle d-none d-md-block" style="top: -20px; left: 60%; animation-delay: 1.5s;"></div>
+        <div class="sparkle d-none d-md-block" style="bottom: 50px; left: 35%; animation-delay: 2.2s;"></div>
+        <div class="sparkle d-none d-md-block" style="bottom: -20px; left: 70%; animation-delay: 0.8s;"></div>
+        
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <!-- Teks Asli Pengguna -->
+                <h1 class="display-4 fw-normal mb-3 text-white">Halo, Saya <span class="text-primary">{{ user.name }}</span></h1>
+                
+                <p class="lead mt-3 mb-4" style="color: var(--text-muted); line-height: 1.7; max-width: 550px;">
+                    {{ user.bio }}
+                </p>
+
+                <div class="mt-4 d-flex flex-wrap gap-3">
+                    <a href="{{ url_for('portfolio') }}" class="btn btn-primary btn-lg px-4">
+                        <i class="bi bi-folder2-open me-2"></i>Lihat Project
+                    </a>
+                    <a href="{{ url_for('contact') }}" class="btn btn-outline-secondary btn-lg px-4">
+                        <i class="bi bi-envelope me-2"></i>Hubungi Saya
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- Highlight Projects Section -->
-<section class="py-5">
-    <div class="container my-4">
-        <h2 class="text-center mb-5 fw-bold">Project Terbaru</h2>
-
+<section class="py-5" style="background-color: var(--bg-card); position: relative; z-index: 10;">
+    <div class="container my-5">
+        <h2 class="text-center mb-2 fw-normal text-white">Project <span class="text-primary">Terbaru</span></h2>
+        <p class="text-center mb-5" style="color: var(--text-muted);">Koleksi karya terbaru yang telah saya kerjakan.</p>
+        
         {% if projects %}
         <div class="row g-4">
             {% for project in projects %}
             <!-- Menggunakan loop Jinja2 untuk membuat card sebanyak project -->
             <div class="col-md-4">
-                <div class="card h-100 project-card">
+                <div class="card h-100 project-card bg-transparent border-0" style="border-radius: 0;">
                     <!-- Jika ada gambar, tampilkan gambar, jika tidak tampilkan placeholder warna -->
                     {% if project.image %}
-                    <img src="{{ url_for('static', filename='uploads/' + project.image) }}" class="card-img-top"
-                        alt="{{ project.title }}" style="height: 200px; object-fit: cover;">
+                    <img src="{{ url_for('static', filename='uploads/' + project.image) }}" class="card-img-top rounded-0"
+                        alt="{{ project.title }}" style="height: 250px; object-fit: cover;">
                     {% else %}
-                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
-                        style="height: 200px;">
-                        <i class="bi bi-image" style="font-size: 3rem;"></i>
+                    <div class="d-flex align-items-center justify-content-center" style="height: 250px; background-color: #111;">
+                        <i class="bi bi-image" style="font-size: 3rem; color: #333;"></i>
                     </div>
                     {% endif %}
 
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title fw-bold">{{ project.title }}</h5>
-                        <p class="card-text text-muted mb-4">{{ project.description[:100] }}...</p>
+                    <div class="card-body px-0 pt-4 d-flex flex-column">
+                        <h4 class="card-title fw-normal text-white mb-3">{{ project.title }}</h4>
+                        <p class="card-text mb-4" style="font-size: 0.9rem;">{{ project.description[:100] }}...</p>
                         <!-- Tombol ditaruh di paling bawah card -->
                         <a href="{{ url_for('project_detail', id=project.id) }}"
-                            class="btn btn-outline-primary mt-auto w-100">Detail Project</a>
+                            class="text-decoration-none mt-auto" style="color: var(--accent-gold); font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase;">Detail Project <i class="bi bi-arrow-right ms-1"></i></a>
                     </div>
                 </div>
             </div>
@@ -53,13 +70,13 @@
         </div>
 
         <div class="text-center mt-5">
-            <a href="{{ url_for('portfolio') }}" class="text-decoration-none fw-bold text-primary">Lihat Semua Project
+            <a href="{{ url_for('portfolio') }}" class="text-decoration-none fw-bold" style="color: var(--accent-gold);">Lihat Semua Project
                 <i class="bi bi-arrow-right"></i></a>
         </div>
 
         {% else %}
         <!-- Jika database kosong belum ada project -->
-        <div class="alert alert-info text-center shadow-sm">
+        <div class="alert alert-info text-center" style="background-color: var(--bg-dark); border-color: var(--border-color); color: var(--text-muted);">
             <i class="bi bi-info-circle me-2"></i> Belum ada project yang ditambahkan di portfolio ini.
         </div>
         {% endif %}

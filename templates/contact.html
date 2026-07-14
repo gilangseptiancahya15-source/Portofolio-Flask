@@ -7,37 +7,36 @@
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
             <div class="text-center mb-5">
-                <h2 class="fw-bold">Hubungi Saya</h2>
+                <h2 class="fw-bold">Hubungi <span class="text-primary">Saya</span></h2>
                 <p class="text-muted">Punya pertanyaan, kritik, saran, atau tawaran kerjasama? Silakan kirim pesan melalui form di bawah ini.</p>
             </div>
             
-            <div class="card shadow-sm border-0">
+            <div class="card border-0">
                 <div class="card-body p-4 p-md-5">
                     
                     <!-- Form Kontak (Method POST) -->
-                    <!-- Saat di submit, akan dikirim ke fungsi contact() di app.py -->
                     <form action="{{ url_for('contact') }}" method="POST">
                         <div class="mb-3">
-                            <label for="name" class="form-label fw-semibold">Nama Lengkap <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg bg-light" id="name" name="name" required placeholder="Masukkan nama Anda">
+                            <label for="name" class="form-label fw-semibold">Nama Lengkap <span style="color: #f87171;">*</span></label>
+                            <input type="text" class="form-control form-control-lg" id="name" name="name" required placeholder="Masukkan nama Anda">
                         </div>
                         
                         <div class="mb-3">
-                            <label for="email" class="form-label fw-semibold">Alamat Email <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control form-control-lg bg-light" id="email" name="email" required placeholder="nama@email.com">
+                            <label for="email" class="form-label fw-semibold">Alamat Email <span style="color: #f87171;">*</span></label>
+                            <input type="email" class="form-control form-control-lg" id="email" name="email" required placeholder="nama@email.com">
                         </div>
                         
                         <div class="mb-3">
-                            <label for="subject" class="form-label fw-semibold">Subjek Pesan <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg bg-light" id="subject" name="subject" required placeholder="Apa yang ingin dibicarakan?">
+                            <label for="subject" class="form-label fw-semibold">Subjek Pesan <span style="color: #f87171;">*</span></label>
+                            <input type="text" class="form-control form-control-lg" id="subject" name="subject" required placeholder="Apa yang ingin dibicarakan?">
                         </div>
                         
                         <div class="mb-4">
-                            <label for="body" class="form-label fw-semibold">Isi Pesan <span class="text-danger">*</span></label>
-                            <textarea class="form-control form-control-lg bg-light" id="body" name="body" rows="5" required placeholder="Tuliskan pesan Anda secara detail..."></textarea>
+                            <label for="body" class="form-label fw-semibold">Isi Pesan <span style="color: #f87171;">*</span></label>
+                            <textarea class="form-control form-control-lg" id="body" name="body" rows="5" required placeholder="Tuliskan pesan Anda secara detail..."></textarea>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm py-3 fw-bold">
+                        <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold">
                             <i class="bi bi-send-fill me-2"></i> Kirim Pesan
                         </button>
                     </form>

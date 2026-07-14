@@ -7,17 +7,17 @@
     <div class="row justify-content-center">
         <div class="col-lg-9">
             <!-- Navigasi Back -->
-            <a href="{{ url_for('portfolio') }}" class="text-decoration-none text-muted mb-4 d-inline-block hover-primary">
+            <a href="{{ url_for('portfolio') }}" class="text-decoration-none mb-4 d-inline-block" style="color: var(--text-muted);">
                 <i class="bi bi-arrow-left me-1"></i> Kembali ke Portfolio
             </a>
             
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="card overflow-hidden" style="border-radius: 0.75rem;">
                 <!-- Cover Image Detail -->
                 {% if project.image %}
                 <img src="{{ url_for('static', filename='uploads/' + project.image) }}" alt="{{ project.title }}" class="img-fluid w-100" style="max-height: 450px; object-fit: cover;">
                 {% else %}
-                <div class="bg-light text-secondary d-flex align-items-center justify-content-center w-100 border-bottom" style="height: 300px;">
-                    <i class="bi bi-image text-muted opacity-50" style="font-size: 5rem;"></i>
+                <div class="d-flex align-items-center justify-content-center w-100" style="height: 300px; background-color: #111113; border-bottom: 1px solid var(--border-color);">
+                    <i class="bi bi-image" style="font-size: 5rem; color: var(--border-color);"></i>
                 </div>
                 {% endif %}
                 
@@ -25,7 +25,7 @@
                     <h1 class="fw-bold mb-3">{{ project.title }}</h1>
                     
                     <!-- Metadata (Tanggal dan Teknologi) -->
-                    <div class="d-flex flex-wrap align-items-center text-muted mb-4 gap-4 border-bottom pb-4">
+                    <div class="d-flex flex-wrap align-items-center mb-4 gap-4 border-bottom pb-4" style="color: var(--text-muted);">
                         <div>
                             <i class="bi bi-calendar3 text-primary me-2"></i> 
                             {{ project.created_at.strftime('%d %B %Y') }}
@@ -39,16 +39,16 @@
                         {% endif %}
                     </div>
                     
-                    <!-- Isi Deskripsi (pre-wrap untuk mempertahankan Enter/Baris Baru) -->
-                    <div class="project-content mb-5" style="white-space: pre-wrap; line-height: 1.8; color: #4a4a4a;">
+                    <!-- Isi Deskripsi -->
+                    <div class="mb-5" style="white-space: pre-wrap; line-height: 1.8; color: var(--text-muted);">
 {{ project.description }}
                     </div>
                     
                     <!-- Tombol Visit Link -->
                     {% if project.link %}
-                    <div class="text-center bg-light p-4 rounded-3 border">
+                    <div class="text-center p-4 rounded-3" style="background-color: #111113; border: 1px solid var(--border-color);">
                         <p class="mb-3 text-muted">Ingin melihat secara langsung?</p>
-                        <a href="{{ project.link }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg px-5 shadow-sm">
+                        <a href="{{ project.link }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg px-5">
                             <i class="bi bi-box-arrow-up-right me-2"></i> Kunjungi Project
                         </a>
                     </div>
