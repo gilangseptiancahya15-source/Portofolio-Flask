@@ -81,13 +81,9 @@
                     <!-- Menu Admin -->
                     <li class="nav-item dropdown mt-3 mt-lg-0 ms-lg-2">
                         <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 py-1 px-2 rounded-pill" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main);">
-                            <!-- Notification icon placeholder -->
-                            <div class="d-flex align-items-center justify-content-center rounded-circle border border-secondary text-muted" style="width: 32px; height: 32px;">
-                                <i class="bi bi-bell"></i>
-                            </div>
                             <!-- Avatar -->
                             {% if user and user.photo %}
-                            <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="Avatar" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;">
+                            <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="Avatar" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover; object-position: {{ user.photo_position }};">
                             {% else %}
                             <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 32px; height: 32px; background-color: var(--accent-glow); color: var(--accent-primary);">
                                 <i class="bi bi-person-fill"></i>

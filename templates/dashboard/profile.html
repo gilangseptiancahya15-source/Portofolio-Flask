@@ -13,7 +13,46 @@
                     <h5 class="fw-bold mb-0 text-white"><i class="bi bi-person-lines-fill text-primary me-2"></i> Edit Informasi Profil</h5>
                 </div>
                 <div class="card-body p-4">
-                    <form action="{{ url_for('manage_profile') }}" method="POST">
+                    <form action="{{ url_for('manage_profile') }}" method="POST" enctype="multipart/form-data" id="profileForm">
+                        <div class="mb-4 text-center">
+                            <div class="mx-auto mb-3 rounded-circle overflow-hidden shadow position-relative" style="width: 140px; height: 140px; border: 3px solid var(--accent-primary); background-color: #111113;">
+                                <img id="photoPreviewImg"
+                                    src="{% if user.photo %}{{ url_for('static', filename='uploads/' + user.photo) }}{% endif %}"
+                                    alt="{{ user.name }}"
+                                    class="w-100 h-100 {% if not user.photo %}d-none{% endif %}"
+                                    style="object-fit: cover; object-position: {{ user.photo_position }};">
+                                <div id="photoPlaceholder" class="d-flex align-items-center justify-content-center w-100 h-100 {% if user.photo %}d-none{% endif %}">
+                                    <i class="bi bi-person" style="font-size: 3.5rem; color: var(--text-muted);"></i>
+                                </div>
+                            </div>
+
+                            <div id="photoPositionControls" class="text-start p-3 rounded mb-3 {% if not user.photo %}d-none{% endif %}" style="background-color: #111113; border: 1px solid var(--border-color);">
+                                <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-arrows-move me-1"></i> Sesuaikan Posisi Foto</h6>
+                                <div class="mb-3">
+                                    <label for="photoPosX" class="form-label small fw-semibold d-flex justify-content-between">
+                                        <span>Horizontal</span>
+                                        <span id="photoPosXValue">{{ user.photo_pos_x or 50 }}%</span>
+                                    </label>
+                                    <input type="range" class="form-range" id="photoPosX" min="0" max="100" value="{{ user.photo_pos_x or 50 }}">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="photoPosY" class="form-label small fw-semibold d-flex justify-content-between">
+                                        <span>Vertikal</span>
+                                        <span id="photoPosYValue">{{ user.photo_pos_y or 50 }}%</span>
+                                    </label>
+                                    <input type="range" class="form-range" id="photoPosY" min="0" max="100" value="{{ user.photo_pos_y or 50 }}">
+                                </div>
+                                <div class="form-text text-muted"><i class="bi bi-info-circle me-1"></i> Geser untuk menyesuaikan bagian foto yang terlihat di Home dan About.</div>
+                            </div>
+
+                            <input type="hidden" name="photo_pos_x" id="photoPosXInput" value="{{ user.photo_pos_x or 50 }}">
+                            <input type="hidden" name="photo_pos_y" id="photoPosYInput" value="{{ user.photo_pos_y or 50 }}">
+
+                            <label for="photo" class="form-label fw-semibold">Foto Profil</label>
+                            <input type="file" class="form-control" id="photo" name="photo" accept="image/png, image/jpeg, image/jpg, image/gif">
+                            <div class="form-text mt-2 text-muted"><i class="bi bi-info-circle me-1"></i> Foto ditampilkan di Home dan About. Format: JPG, PNG, GIF (Maks. 2MB).</div>
+                        </div>
+
                         <div class="mb-3">
                             <label for="name" class="form-label fw-semibold">Nama Lengkap</label>
                             <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required>
@@ -25,10 +64,16 @@
                         <div class="mb-4">
                             <label for="bio" class="form-label fw-semibold">Bio Singkat</label>
                             <textarea class="form-control" id="bio" name="bio" rows="6" required>{{ user.bio }}</textarea>
-                            <div class="form-text mt-2 text-muted"><i class="bi bi-info-circle me-1"></i> Bio ini akan ditampilkan di halaman depan (Home) sebagai ucapan selamat datang.</div>
+                            <div class="form-text mt-2 text-muted"><i class="bi bi-info-circle me-1"></i> Bio ini akan ditampilkan di halaman Home dan About.</div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow-sm text-dark"><i class="bi bi-save me-2"></i> Simpan Perubahan Profil</button>
                     </form>
+
+                    {% if user.photo %}
+                    <form action="{{ url_for('delete_profile_photo') }}" method="POST" class="mt-3 text-center" onsubmit="return confirm('Apakah Anda yakin ingin menghapus foto profil?');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i> Hapus Foto Profil</button>
+                    </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -96,4 +141,53 @@
         </div>
     </div>
 </div>
+
+<script>
+(function () {
+    const photoInput = document.getElementById('photo');
+    const previewImg = document.getElementById('photoPreviewImg');
+    const placeholder = document.getElementById('photoPlaceholder');
+    const positionControls = document.getElementById('photoPositionControls');
+    const posX = document.getElementById('photoPosX');
+    const posY = document.getElementById('photoPosY');
+    const posXValue = document.getElementById('photoPosXValue');
+    const posYValue = document.getElementById('photoPosYValue');
+    const posXInput = document.getElementById('photoPosXInput');
+    const posYInput = document.getElementById('photoPosYInput');
+
+    function updatePhotoPosition() {
+        const x = posX.value;
+        const y = posY.value;
+        previewImg.style.objectPosition = x + '% ' + y + '%';
+        posXValue.textContent = x + '%';
+        posYValue.textContent = y + '%';
+        posXInput.value = x;
+        posYInput.value = y;
+    }
+
+    function showPhotoPreview(src) {
+        previewImg.src = src;
+        previewImg.classList.remove('d-none');
+        placeholder.classList.add('d-none');
+        positionControls.classList.remove('d-none');
+        updatePhotoPosition();
+    }
+
+    posX.addEventListener('input', updatePhotoPosition);
+    posY.addEventListener('input', updatePhotoPosition);
+
+    photoInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            showPhotoPreview(event.target.result);
+        };
+        reader.readAsDataURL(file);
+    });
+
+    updatePhotoPosition();
+})();
+</script>
 {% endblock %}

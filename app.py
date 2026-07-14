@@ -19,9 +19,41 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 
+def parse_photo_position(form):
+    """Mengambil dan memvalidasi posisi foto profil (0-100%)."""
+    try:
+        pos_x = int(form.get('photo_pos_x', 50))
+        pos_y = int(form.get('photo_pos_y', 50))
+    except (TypeError, ValueError):
+        return 50, 50
+    return max(0, min(100, pos_x)), max(0, min(100, pos_y))
+
+
+def ensure_schema():
+    """Menambahkan kolom baru ke database yang sudah ada."""
+    from sqlalchemy import inspect, text
+
+    inspector = inspect(db.engine)
+    if not inspector.has_table('user'):
+        return
+
+    columns = {column['name'] for column in inspector.get_columns('user')}
+    with db.engine.begin() as conn:
+        if 'photo_pos_x' not in columns:
+            conn.execute(text('ALTER TABLE user ADD COLUMN photo_pos_x INTEGER DEFAULT 50'))
+        if 'photo_pos_y' not in columns:
+            conn.execute(text('ALTER TABLE user ADD COLUMN photo_pos_y INTEGER DEFAULT 50'))
+
+
+with app.app_context():
+    db.create_all()
+    ensure_schema()
+
+
 def init_database():
     with app.app_context():
         db.create_all()
+        ensure_schema()
         admin = User.query.first()
         if admin is None:
             admin_baru = User(
@@ -279,6 +311,26 @@ def manage_profile():
             admin.name = name
             admin.email = email
             admin.bio = bio
+            admin.photo_pos_x, admin.photo_pos_y = parse_photo_position(request.form)
+
+            file = request.files.get('photo')
+            if file and file.filename != '':
+                if allowed_file(file.filename):
+                    safe_name = secure_filename(file.filename)
+                    filename = f"{uuid.uuid4().hex[:8]}_{safe_name}"
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    file.save(filepath)
+
+                    if admin.photo:
+                        old_filepath = os.path.join(app.config['UPLOAD_FOLDER'], admin.photo)
+                        if os.path.exists(old_filepath):
+                            os.remove(old_filepath)
+
+                    admin.photo = filename
+                else:
+                    flash('Ekstensi file foto tidak diizinkan!', 'danger')
+                    return redirect(request.url)
+
             db.session.commit()
             flash('Profil berhasil diperbarui!', 'success')
             return redirect(url_for('manage_profile'))
@@ -286,6 +338,26 @@ def manage_profile():
     # Variabel user sebenarnya sudah disuntik oleh context_processor, 
     # tapi kita pastikan data form terupdate saat page dimuat.
     return render_template('dashboard/profile.html', user=admin, skills=skills)
+
+@app.route('/dashboard/profile/delete-photo', methods=['POST'])
+@login_required
+def delete_profile_photo():
+    admin = User.query.first()
+
+    if admin.photo:
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], admin.photo)
+        if os.path.exists(filepath):
+            os.remove(filepath)
+        admin.photo = None
+        admin.photo_pos_x = 50
+        admin.photo_pos_y = 50
+        db.session.commit()
+        flash('Foto profil berhasil dihapus.', 'success')
+    else:
+        flash('Tidak ada foto profil yang dapat dihapus.', 'warning')
+
+    return redirect(url_for('manage_profile'))
+
 @app.route('/dashboard/skills/add', methods=['POST'])
 @login_required
 def add_skill():

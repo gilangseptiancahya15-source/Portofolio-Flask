@@ -31,6 +31,15 @@
                     </a>
                 </div>
             </div>
+            <div class="col-lg-5 text-center mt-5 mt-lg-0">
+                {% if user.photo %}
+                <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="{{ user.name }}" class="img-fluid rounded-circle shadow" style="width: 280px; height: 280px; object-fit: cover; object-position: {{ user.photo_position }}; border: 3px solid var(--accent-primary);">
+                {% else %}
+                <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 280px; height: 280px; background-color: var(--bg-card); border: 2px solid var(--border-color);">
+                    <i class="bi bi-person" style="font-size: 6rem; color: var(--text-muted);"></i>
+                </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </section>

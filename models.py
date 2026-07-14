@@ -18,7 +18,15 @@ class User(db.Model):
     email = db.Column(db.String(120), nullable=False)
     bio = db.Column(db.Text, nullable=True)
     photo = db.Column(db.String(200), nullable=True)
+    photo_pos_x = db.Column(db.Integer, default=50)
+    photo_pos_y = db.Column(db.Integer, default=50)
     created_at = db.Column(db.DateTime, default=datetime.now)
+
+    @property
+    def photo_position(self):
+        x = 50 if self.photo_pos_x is None else self.photo_pos_x
+        y = 50 if self.photo_pos_y is None else self.photo_pos_y
+        return f'{x}% {y}%'
 
     def __repr__(self):
         return f'<User {self.username}>'

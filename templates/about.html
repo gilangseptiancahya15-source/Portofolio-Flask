@@ -9,7 +9,7 @@
         <div class="col-md-4 text-center mb-4 mb-md-0">
             <!-- Foto Profil (Bisa diganti di dashboard) -->
             {% if user.photo %}
-            <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="{{ user.name }}" class="img-fluid rounded-circle shadow" style="width: 250px; height: 250px; object-fit: cover; border: 3px solid var(--primary);">
+            <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="{{ user.name }}" class="img-fluid rounded-circle shadow" style="width: 250px; height: 250px; object-fit: cover; object-position: {{ user.photo_position }}; border: 3px solid var(--primary);">
             {% else %}
             <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 250px; height: 250px; background-color: var(--bg-card); border: 2px solid var(--border-color);">
                 <i class="bi bi-person" style="font-size: 6rem; color: var(--text-muted);"></i>
