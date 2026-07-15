@@ -13,6 +13,6 @@ class Config:
 
     UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
 
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
-    MAX_CONTENT_LENGTH = 2 * 1024 * 1024  # 2 MB
+    MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 2 MB
