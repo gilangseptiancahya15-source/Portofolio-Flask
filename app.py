@@ -48,6 +48,12 @@ def ensure_schema():
         if 'linkedin' not in columns:
             conn.execute(text('ALTER TABLE user ADD COLUMN linkedin VARCHAR(200)'))
 
+    if inspector.has_table('project'):
+        project_columns = {column['name'] for column in inspector.get_columns('project')}
+        with db.engine.begin() as conn:
+            if 'github_link' not in project_columns:
+                conn.execute(text('ALTER TABLE project ADD COLUMN github_link VARCHAR(300)'))
+
 
 with app.app_context():
     db.create_all()
@@ -208,6 +214,7 @@ def add_project():
         description = request.form.get('description')
         technology = request.form.get('technology')
         link = request.form.get('link')
+        github_link = request.form.get('github_link')
         
         # Validasi dasar
         if not title or not description:
@@ -232,6 +239,7 @@ def add_project():
                 description=description,
                 technology=technology,
                 link=link,
+                github_link=github_link,
                 image=filename
             )
             
@@ -251,6 +259,7 @@ def edit_project(id):
         project.description = request.form.get('description')
         project.technology = request.form.get('technology')
         project.link = request.form.get('link')
+        project.github_link = request.form.get('github_link')
         
         
         if not project.title or not project.description:
@@ -372,21 +381,15 @@ def delete_profile_photo():
 @login_required
 def add_skill():
     name = request.form.get('name')
-    level = request.form.get('level')
     
-    if name and level:
-        try:
-            level_int = int(level)
-            if 10 <= level_int <= 100:
-                new_skill = Skill(name=name, level=level_int)
-                db.session.add(new_skill)
-                db.session.commit()
-                flash('Keahlian baru berhasil ditambahkan!', 'success')
-            else:
-                flash('Level harus berada di antara 10 hingga 100!', 'danger')
-        except ValueError:
-            flash('Level harus berupa angka!', 'danger')
-            
+    if name:
+        new_skill = Skill(name=name)
+        db.session.add(new_skill)
+        db.session.commit()
+        flash('Skill baru berhasil ditambahkan!', 'success')
+    else:
+        flash('Data skill tidak valid!', 'danger')
+        
     return redirect(url_for('manage_profile'))
 @app.route('/dashboard/skills/delete/<int:id>', methods=['POST'])
 @login_required

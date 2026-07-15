@@ -96,15 +96,11 @@
                     <form action="{{ url_for('add_skill') }}" method="POST" class="mb-4 p-3 rounded" style="background-color: #111113; border: 1px solid var(--border-color);">
                         <h6 class="fw-bold mb-3 text-primary">Tambah Skill Baru</h6>
                         <div class="row g-2">
-                            <div class="col-md-7">
+                            <div class="col-md-10">
                                 <input type="text" class="form-control" name="name" placeholder="Keahlian (Contoh: Python)" required>
                             </div>
-                            <div class="col-md-5">
-                                <div class="input-group">
-                                    <input type="number" class="form-control" name="level" placeholder="Level" min="10" max="100" required>
-                                    <span class="input-group-text">%</span>
-                                    <button type="submit" class="btn btn-primary fw-semibold text-dark"><i class="bi bi-plus-lg"></i></button>
-                                </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary fw-semibold text-dark w-100"><i class="bi bi-plus-lg"></i> Tambah</button>
                             </div>
                         </div>
                     </form>
@@ -114,7 +110,6 @@
                             <thead class="table-light">
                                 <tr>
                                     <th class="py-3">Nama Keahlian</th>
-                                    <th class="py-3" style="width: 45%;">Tingkat Penguasaan</th>
                                     <th class="py-3 text-end">Aksi</th>
                                 </tr>
                             </thead>
@@ -122,14 +117,6 @@
                                 {% for skill in skills %}
                                 <tr>
                                     <td class="fw-semibold">{{ skill.name }}</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress flex-grow-1 me-2 shadow-sm" style="height: 10px; background-color: var(--border-color);">
-                                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: {{ skill.level }}%;"></div>
-                                            </div>
-                                            <span class="badge bg-primary rounded-pill text-dark">{{ skill.level }}%</span>
-                                        </div>
-                                    </td>
                                     <td class="text-end">
                                         <form action="{{ url_for('delete_skill', id=skill.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus skill ini?');">
                                             <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash"></i></button>
@@ -138,7 +125,7 @@
                                 </tr>
                                 {% else %}
                                 <tr>
-                                    <td colspan="3" class="text-center py-4 text-muted">Belum ada data keahlian. Tambahkan melalui form di atas.</td>
+                                    <td colspan="2" class="text-center text-muted py-4">Belum ada skill yang ditambahkan.</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

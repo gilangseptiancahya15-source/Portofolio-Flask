@@ -50,17 +50,13 @@
             <h3 class="fw-bold text-center mb-5">Keahlian & <span class="text-primary">Teknologi</span></h3>
             <div class="row g-4">
                 {% if skills %}
+                    <div class="col-12 d-flex flex-wrap gap-3 justify-content-center">
                     {% for skill in skills %}
-                    <div class="col-md-6">
-                        <div class="skill-name d-flex justify-content-between">
-                            <span>{{ skill.name }}</span>
-                            <span class="text-muted">{{ skill.level }}%</span>
+                        <div class="px-4 py-3 rounded-pill" style="background-color: var(--bg-card); border: 1px solid var(--border-color);">
+                            <span class="fs-6 fw-medium text-white"><i class="bi bi-check-circle-fill text-primary me-2"></i>{{ skill.name }}</span>
                         </div>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" style="width: {{ skill.level }}%" aria-valuenow="{{ skill.level }}" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
                     {% endfor %}
+                    </div>
                 {% else %}
                     <div class="col-12 text-center text-muted">Belum ada data skill yang ditambahkan.</div>
                 {% endif %}

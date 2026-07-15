@@ -46,6 +46,7 @@ class Project(db.Model):
     image = db.Column(db.String(200), nullable=True)
     technology = db.Column(db.String(300), nullable=True)
     link = db.Column(db.String(300), nullable=True)
+    github_link = db.Column(db.String(300), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.now)
 
     def __repr__(self):

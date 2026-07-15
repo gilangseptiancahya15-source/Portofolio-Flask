@@ -44,13 +44,23 @@
 {{ project.description }}
                     </div>
                     
-                    <!-- Tombol Visit Link -->
-                    {% if project.link %}
+                    <!-- Tombol Visit Link & GitHub -->
+                    {% if project.link or project.github_link %}
                     <div class="text-center p-4 rounded-3" style="background-color: #111113; border: 1px solid var(--border-color);">
-                        <p class="mb-3 text-muted">Ingin melihat secara langsung?</p>
-                        <a href="{{ project.link }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg px-5">
-                            <i class="bi bi-box-arrow-up-right me-2"></i> Kunjungi Project
-                        </a>
+                        <p class="mb-3 text-muted">Ingin melihat secara langsung atau kode sumbernya?</p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            {% if project.link %}
+                            <a href="{{ project.link }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary px-4 py-2">
+                                <i class="bi bi-box-arrow-up-right me-2"></i> Kunjungi Project
+                            </a>
+                            {% endif %}
+                            
+                            {% if project.github_link %}
+                            <a href="{{ project.github_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary px-4 py-2">
+                                <i class="bi bi-github me-2"></i> Repositori GitHub
+                            </a>
+                            {% endif %}
+                        </div>
                     </div>
                     {% endif %}
                 </div>
