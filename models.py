@@ -16,6 +16,8 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=False)
+    github = db.Column(db.String(200), nullable=True)
+    linkedin = db.Column(db.String(200), nullable=True)
     bio = db.Column(db.Text, nullable=True)
     photo = db.Column(db.String(200), nullable=True)
     photo_pos_x = db.Column(db.Integer, default=50)

@@ -13,8 +13,8 @@
         <div class="sparkle d-none d-md-block" style="bottom: 50px; left: 35%; animation-delay: 2.2s;"></div>
         <div class="sparkle d-none d-md-block" style="bottom: -20px; left: 70%; animation-delay: 0.8s;"></div>
         
-        <div class="row align-items-center">
-            <div class="col-lg-7">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-lg-6 mb-5 mb-lg-0 order-2 order-lg-1">
                 <!-- Teks Asli Pengguna -->
                 <h1 class="display-4 fw-normal mb-3 text-white">Halo, Saya <span class="text-primary">{{ user.name }}</span></h1>
                 
@@ -30,17 +30,40 @@
                         <i class="bi bi-envelope me-2"></i>Hubungi Saya
                     </a>
                 </div>
-            </div>
-            <div class="col-lg-5 text-center mt-5 mt-lg-0">
-                {% if user.photo %}
-                <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="{{ user.name }}" class="img-fluid rounded-circle shadow" style="width: 280px; height: 280px; object-fit: cover; object-position: {{ user.photo_position }}; border: 3px solid var(--accent-primary);">
-                {% else %}
-                <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 280px; height: 280px; background-color: var(--bg-card); border: 2px solid var(--border-color);">
-                    <i class="bi bi-person" style="font-size: 6rem; color: var(--text-muted);"></i>
+
+                <div class="mt-4 pt-2 d-flex align-items-center gap-3">
+                    <a href="mailto:{{ user.email }}" class="text-muted d-flex align-items-center justify-content-center rounded-circle border border-secondary transition-all" style="width: 45px; height: 45px; font-size: 1.2rem; transition: 0.3s;" onmouseover="this.style.color='var(--accent-primary)'; this.style.borderColor='var(--accent-primary)';" onmouseout="this.style.color=''; this.style.borderColor='';">
+                        <i class="bi bi-envelope-fill"></i>
+                    </a>
+                    {% if user.github %}
+                    <a href="{{ user.github }}" target="_blank" rel="noopener noreferrer" class="text-muted d-flex align-items-center justify-content-center rounded-circle border border-secondary transition-all" style="width: 45px; height: 45px; font-size: 1.2rem; transition: 0.3s;" onmouseover="this.style.color='var(--accent-primary)'; this.style.borderColor='var(--accent-primary)';" onmouseout="this.style.color=''; this.style.borderColor='';">
+                        <i class="bi bi-github"></i>
+                    </a>
+                    {% endif %}
+                    {% if user.linkedin %}
+                    <a href="{{ user.linkedin }}" target="_blank" rel="noopener noreferrer" class="text-muted d-flex align-items-center justify-content-center rounded-circle border border-secondary transition-all" style="width: 45px; height: 45px; font-size: 1.2rem; transition: 0.3s;" onmouseover="this.style.color='var(--accent-primary)'; this.style.borderColor='var(--accent-primary)';" onmouseout="this.style.color=''; this.style.borderColor='';">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                    {% endif %}
                 </div>
-                {% endif %}
             </div>
-        </div>
+            <!-- Foto Profil -->
+            <div class="col-lg-5 order-1 order-lg-2 text-center position-relative mt-5 mt-lg-0">
+                <div class="position-relative d-inline-block">
+                    <!-- Glow effect di belakang foto -->
+                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 320px; height: 320px; background: var(--accent-glow); filter: blur(40px); z-index: 1;"></div>
+                    
+                    <div class="rounded-circle overflow-hidden position-relative shadow-lg" style="width: 300px; height: 300px; border: 4px solid var(--accent-primary); z-index: 2; background-color: var(--bg-card);">
+                        {% if user and user.photo %}
+                        <img src="{{ url_for('static', filename='uploads/' + user.photo) }}" alt="Foto {{ user.name }}" class="w-100 h-100" style="object-fit: cover; object-position: {{ user.photo_pos_x or 50 }}% {{ user.photo_pos_y or 50 }}%;">
+                        {% else %}
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">
+                            <i class="bi bi-person" style="font-size: 8rem;"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
     </div>
 </section>
 

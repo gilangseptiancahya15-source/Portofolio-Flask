@@ -43,6 +43,10 @@ def ensure_schema():
             conn.execute(text('ALTER TABLE user ADD COLUMN photo_pos_x INTEGER DEFAULT 50'))
         if 'photo_pos_y' not in columns:
             conn.execute(text('ALTER TABLE user ADD COLUMN photo_pos_y INTEGER DEFAULT 50'))
+        if 'github' not in columns:
+            conn.execute(text('ALTER TABLE user ADD COLUMN github VARCHAR(200)'))
+        if 'linkedin' not in columns:
+            conn.execute(text('ALTER TABLE user ADD COLUMN linkedin VARCHAR(200)'))
 
 
 with app.app_context():
@@ -61,6 +65,8 @@ def init_database():
                 password=generate_password_hash('admin123'),
                 name='Gilang Septian',
                 email='gilang@example.com',
+                github='https://github.com/gilangseptian',
+                linkedin='https://www.linkedin.com/in/gilang-septian/',
                 bio='Mahasiswa Teknik Informatika yang antusias dalam pengembangan web dan teknologi.',
             )
             db.session.add(admin_baru)
@@ -304,6 +310,8 @@ def manage_profile():
         name = request.form.get('name')
         email = request.form.get('email')
         bio = request.form.get('bio')
+        github = request.form.get('github')
+        linkedin = request.form.get('linkedin')
         
         if not name or not email or not bio:
             flash('Semua kolom profil wajib diisi!', 'danger')
@@ -311,6 +319,8 @@ def manage_profile():
             admin.name = name
             admin.email = email
             admin.bio = bio
+            admin.github = github
+            admin.linkedin = linkedin
             admin.photo_pos_x, admin.photo_pos_y = parse_photo_position(request.form)
 
             file = request.files.get('photo')
