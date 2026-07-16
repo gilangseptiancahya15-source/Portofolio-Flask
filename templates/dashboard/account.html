@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Pengaturan Akun{% endblock %}
+
+{% block content %}
+<div class="container py-5 my-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-sm me-3 shadow-sm"><i class="bi bi-arrow-left"></i> Kembali</a>
+                <h2 class="fw-bold mb-0 text-primary">Pengaturan Akun</h2>
+            </div>
+            
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <form action="{{ url_for('account_settings') }}" method="POST">
+                        
+                        <h5 class="fw-bold text-white mb-4"><i class="bi bi-person-badge text-primary me-2"></i> Kredensial Admin</h5>
+                        
+                        <div class="mb-4">
+                            <label for="username" class="form-label fw-semibold">Username Baru</label>
+                            <input type="text" class="form-control" id="username" name="username" value="{{ current_user.username }}" required>
+                            <div class="form-text text-muted"><i class="bi bi-info-circle me-1"></i> Username digunakan untuk login ke dashboard.</div>
+                        </div>
+                        
+                        <hr class="my-4" style="border-color: var(--border-color);">
+                        
+                        <h5 class="fw-bold text-white mb-4"><i class="bi bi-shield-lock text-primary me-2"></i> Ubah Password</h5>
+                        
+                        <div class="mb-4 p-3 rounded" style="background-color: #111113; border: 1px solid var(--border-color);">
+                            <label for="old_password" class="form-label fw-semibold text-warning">Password Lama <span style="color: #f87171;">*</span></label>
+                            <input type="password" class="form-control" id="old_password" name="old_password" required placeholder="Masukkan password saat ini">
+                            <div class="form-text text-muted mt-2">Wajib diisi untuk memverifikasi perubahan akun Anda.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="new_password" class="form-label fw-semibold">Password Baru</label>
+                            <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Biarkan kosong jika tidak ingin mengubah password">
+                        </div>
+
+                        <div class="mb-5">
+                            <label for="confirm_password" class="form-label fw-semibold">Konfirmasi Password Baru</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Ulangi password baru">
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm fw-bold text-dark"><i class="bi bi-save me-2"></i> Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

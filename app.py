@@ -197,6 +197,44 @@ def dashboard():
                            unread_messages=unread_messages,
                            total_skills=total_skills)
 
+@app.route('/dashboard/account', methods=['GET', 'POST'])
+@login_required
+def account_settings():
+    admin = User.query.first()
+    
+    if request.method == 'POST':
+        username = request.form.get('username')
+        old_password = request.form.get('old_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        # Cek old password wajib diisi dan benar
+        if not old_password:
+            flash('Password lama wajib diisi!', 'danger')
+            return redirect(url_for('account_settings'))
+            
+        if not check_password_hash(admin.password, old_password):
+            flash('Password lama salah!', 'danger')
+            return redirect(url_for('account_settings'))
+            
+        # Update username jika ada perubahan
+        if username and username != admin.username:
+            admin.username = username
+            
+        # Update password jika form password baru diisi
+        if new_password:
+            if new_password != confirm_password:
+                flash('Konfirmasi password tidak cocok!', 'danger')
+                return redirect(url_for('account_settings'))
+            admin.password = generate_password_hash(new_password)
+            
+        db.session.commit()
+        flash('Pengaturan akun berhasil diperbarui!', 'success')
+        return redirect(url_for('account_settings'))
+        
+    # Mengirim current_user karena nama var 'user' mungkin konflik dengan inject_user
+    return render_template('dashboard/account.html', current_user=admin)
+
 # =============================================================
 # Route CRUD Project 
 # =============================================================
