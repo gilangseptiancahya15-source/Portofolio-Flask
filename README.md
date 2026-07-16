@@ -139,45 +139,12 @@ Saat pertama kali dijalankan (jika database masih kosong), sistem akan otomatis 
 
 ---
 
-## 📸 Screenshot Aplikasi
-
-*(Berikut adalah beberapa cuplikan antarmuka dari web portofolio ini)*
-
-### Halaman Beranda (Frontend Utama)
-![Screenshot Halaman Beranda](<Screenshot>)
-
-### Halaman Detail Proyek
-![Screenshot Detail Proyek](<Screenshot>)
-
-### Halaman Dashboard Admin
-![Screenshot Dashboard Admin](<Screenshot>)
-
-### Form Pengaturan Akun
-![Screenshot Pengaturan Akun](<Screenshot>)
-
----
-
 ## 📦 Daftar Library yang Digunakan
 
 Proyek ini sangat bergantung pada library-library Python berikut (silakan merujuk pada `requirements.txt`):
 - **`Flask`** (Kerangka/Framework web backend)
 - **`Flask-SQLAlchemy`** (Sistem ORM untuk kemudahan kueri ke Database)
 - **`Werkzeug`** (Utilitas pengamanan/hashing *password* dan sanitasi *upload* file)
-
----
-
-## 🌐 Cara Deployment (Singkat)
-
-Proyek Flask ini dapat di-_deploy_ agar *online* dengan menggunakan layanan *Cloud App Hosting* secara gratis (seperti **PythonAnywhere** atau **Render**).
-
-**Contoh Deployment ke PythonAnywhere:**
-1. Daftarkan akun di PythonAnywhere.
-2. Buka fitur *Bash Console*, lakukan `git clone <URL GitHub>` proyek Anda.
-3. Buat *Virtualenv* dan instal *library* dengan perintah `pip install -r requirements.txt`.
-4. Di *tab* **Web**, tambahkan *Web App* baru, lalu pilih opsi *Manual Configuration* (dengan Python 3.x).
-5. Sunting file WSGI configuration, arahkan `path` menuju folder *clone* proyek Anda, lalu impor `app` dari `app.py`.
-6. Hubungkan ke nama domain pilihan Anda (contohnya: `<Domain .my.id>`).
-7. Klik tombol hijau **Reload** dan situs Anda sudah sepenuhnya *live*!
 
 ---
 
