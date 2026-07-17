@@ -60,34 +60,49 @@ with app.app_context():
     ensure_schema()
 
 
+with app.app_context():
+    db.create_all()
+    ensure_schema()
+
+
 def init_database():
     with app.app_context():
         db.create_all()
         ensure_schema()
+
         admin = User.query.first()
+
         if admin is None:
             admin_baru = User(
-                username='admin',
-                password=generate_password_hash('admin123'),
-                name='Gilang Septian',
-                email='gilang@example.com',
-                github='https://github.com/gilangseptian',
-                linkedin='https://www.linkedin.com/in/gilang-septian/',
-                bio='Mahasiswa Teknik Informatika yang antusias dalam pengembangan web dan teknologi.',
+                username=os.environ.get("ADMIN_USERNAME", "admin"),
+                password=generate_password_hash(
+                    os.environ.get("ADMIN_PASSWORD", "admin123")
+                ),
+                name="Gilang Septian",
+                email="gilang@example.com",
+                github="https://github.com/gilangseptian",
+                linkedin="https://www.linkedin.com/in/gilang-septian/",
+                bio="Mahasiswa Teknik Informatika yang antusias dalam pengembangan web dan teknologi.",
             )
+
             db.session.add(admin_baru)
 
             skill_default = [
-                Skill(name='Python', level=80),
-                Skill(name='HTML/CSS', level=85),
-                Skill(name='JavaScript', level=70),
-                Skill(name='Flask', level=75),
-                Skill(name='SQL', level=65),
+                Skill(name="Python", level=80),
+                Skill(name="HTML/CSS", level=85),
+                Skill(name="JavaScript", level=70),
+                Skill(name="Flask", level=75),
+                Skill(name="SQL", level=65),
             ]
+
             db.session.add_all(skill_default)
             db.session.commit()
-            print('>> Database berhasil dibuat!')
 
+            print("✅ Database berhasil dibuat!")
+        else:
+            print("✅ Admin sudah ada.")
+
+init_database()
 
 @app.context_processor
 def inject_user():
@@ -465,5 +480,4 @@ def delete_message(id):
     return redirect(url_for('manage_messages'))
 
 if __name__ == '__main__':
-    init_database()
     app.run(debug=True)
