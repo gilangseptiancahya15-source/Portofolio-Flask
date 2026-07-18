@@ -20,3 +20,7 @@ class Config:
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
 
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024
+
+    SUPABASE_URL = os.getenv("SUPABASE_URL")
+    SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY")
+    SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET")

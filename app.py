@@ -6,9 +6,15 @@ from config import Config
 from models import db, User, Project, Skill, Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from supabase import create_client
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+supabase = create_client(
+    app.config["SUPABASE_URL"],
+    app.config["SUPABASE_SERVICE_KEY"]
+)
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 db.init_app(app)
@@ -18,6 +24,43 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
+def upload_to_supabase(file):
+    """Upload file ke Supabase Storage dan mengembalikan URL publik"""
+
+    filename = f"{uuid.uuid4().hex}_{secure_filename(file.filename)}"
+
+    file.file.seek(0)
+
+    supabase.storage.from_(app.config["SUPABASE_BUCKET"]).upload(
+        path=filename,
+        file=file.file,
+        file_options={
+            "content-type": file.content_type,
+            "upsert": "true"
+        }
+    )
+
+    public_url = supabase.storage.from_(
+        app.config["SUPABASE_BUCKET"]
+    ).get_public_url(filename)
+
+    return public_url
+
+ddef delete_from_supabase(url):
+    """Menghapus file dari Supabase Storage"""
+
+    if not url:
+        return
+
+    try:
+        filename = url.split("/")[-1]
+
+        supabase.storage.from_(
+            app.config["SUPABASE_BUCKET"]
+        ).remove([filename])
+
+    except Exception as e:
+        print("Gagal menghapus file:", e)
 
 def parse_photo_position(form):
     """Mengambil dan memvalidasi posisi foto profil (0-100%)."""
@@ -275,17 +318,13 @@ def add_project():
         else:
             # Handle Upload Gambar
             filename = None
-            file = request.files.get('image')
-            
-            if file and file.filename != '':
+            file = request.files.get("image")
+
+            if file and file.filename != "":
                 if allowed_file(file.filename):
-                    safe_name = secure_filename(file.filename)
-                    # Tambahkan UUID agar nama file unik
-                    filename = f"{uuid.uuid4().hex[:8]}_{safe_name}"
-                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                    file.save(filepath)
+                    filename = upload_to_supabase(file)
                 else:
-                    flash('Ekstensi file gambar tidak diizinkan!', 'danger')
+                    flash("Ekstensi file gambar tidak diizinkan!", "danger")
                     return redirect(request.url)
             new_project = Project(
                 title=title,
@@ -306,43 +345,37 @@ def add_project():
 @login_required
 def edit_project(id):
     project = Project.query.get_or_404(id)
-    
+
     if request.method == 'POST':
         project.title = request.form.get('title')
         project.description = request.form.get('description')
         project.technology = request.form.get('technology')
         project.link = request.form.get('link')
         project.github_link = request.form.get('github_link')
-        
-        
+
         if not project.title or not project.description:
             flash('Judul dan Deskripsi wajib diisi!', 'danger')
         else:
-             # Handle Update Gambar
-            file = request.files.get('image')
-            
-            if file and file.filename != '':
+            file = request.files.get("image")
+
+            if file and file.filename != "":
                 if allowed_file(file.filename):
-                    safe_name = secure_filename(file.filename)
-                    filename = f"{uuid.uuid4().hex[:8]}_{safe_name}"
-                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                    file.save(filepath)
-                    
-                    # Hapus gambar lama jika ada
+                    filename = upload_to_supabase(file)
+
+                    # hapus gambar lama
                     if project.image:
-                        old_filepath = os.path.join(app.config['UPLOAD_FOLDER'], project.image)
-                        if os.path.exists(old_filepath):
-                            os.remove(old_filepath)
-                            
+                        delete_from_supabase(project.image)
+
                     project.image = filename
                 else:
-                    flash('Ekstensi file gambar tidak diizinkan!', 'danger')
+                    flash("Ekstensi file gambar tidak diizinkan!", "danger")
                     return redirect(request.url)
+
             db.session.commit()
-            flash('Project berhasil diperbarui!', 'success')
-            return redirect(url_for('manage_projects'))
-            
-    return render_template('dashboard/edit_project.html', project=project)
+            flash("Project berhasil diperbarui!", "success")
+            return redirect(url_for("manage_projects"))
+
+    return render_template("dashboard/edit_project.html", project=project)
 @app.route('/dashboard/projects/delete/<int:id>', methods=['POST'])
 @login_required
 def delete_project(id):
@@ -350,9 +383,7 @@ def delete_project(id):
    
     # Hapus file gambar dari server jika ada
     if project.image:
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], project.image)
-        if os.path.exists(filepath):
-            os.remove(filepath)
+        delete_from_supabase(project.image)
 
     db.session.delete(project)
     db.session.commit()
@@ -388,15 +419,10 @@ def manage_profile():
             file = request.files.get('photo')
             if file and file.filename != '':
                 if allowed_file(file.filename):
-                    safe_name = secure_filename(file.filename)
-                    filename = f"{uuid.uuid4().hex[:8]}_{safe_name}"
-                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                    file.save(filepath)
+                    filename = upload_to_supabase(file)
 
                     if admin.photo:
-                        old_filepath = os.path.join(app.config['UPLOAD_FOLDER'], admin.photo)
-                        if os.path.exists(old_filepath):
-                            os.remove(old_filepath)
+                        delete_from_supabase(admin.photo)
 
                     admin.photo = filename
                 else:
@@ -417,17 +443,16 @@ def delete_profile_photo():
     admin = User.query.first()
 
     if admin.photo:
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], admin.photo)
-        if os.path.exists(filepath):
-            os.remove(filepath)
+        delete_from_supabase(admin.photo)
+
         admin.photo = None
         admin.photo_pos_x = 50
         admin.photo_pos_y = 50
+
         db.session.commit()
         flash('Foto profil berhasil dihapus.', 'success')
     else:
         flash('Tidak ada foto profil yang dapat dihapus.', 'warning')
-
     return redirect(url_for('manage_profile'))
 
 @app.route('/dashboard/skills/add', methods=['POST'])
