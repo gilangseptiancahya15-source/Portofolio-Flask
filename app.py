@@ -46,7 +46,7 @@ def upload_to_supabase(file):
 
     return public_url
 
-ddef delete_from_supabase(url):
+def delete_from_supabase(url):
     """Menghapus file dari Supabase Storage"""
 
     if not url:
