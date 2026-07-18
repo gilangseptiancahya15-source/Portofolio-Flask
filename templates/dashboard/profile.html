@@ -17,7 +17,7 @@
                         <div class="mb-4 text-center">
                             <div class="mx-auto mb-3 rounded-circle overflow-hidden shadow position-relative" style="width: 140px; height: 140px; border: 3px solid var(--accent-primary); background-color: #111113;">
                                 <img id="photoPreviewImg"
-                                    src="{% if user.photo %}{{ url_for('static', filename='uploads/' + user.photo) }}{% endif %}"
+                                    src="{% if user.photo %}{{ user.photo }}{% endif %}"
                                     alt="{{ user.name }}"
                                     class="w-100 h-100 {% if not user.photo %}d-none{% endif %}"
                                     style="object-fit: cover; object-position: {{ user.photo_pos_x or 50 }}% {{ user.photo_pos_y or 50 }}%;">

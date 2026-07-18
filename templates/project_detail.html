@@ -14,7 +14,7 @@
             <div class="card overflow-hidden" style="border-radius: 0.75rem;">
                 <!-- Cover Image Detail -->
                 {% if project.image %}
-                <img src="{{ url_for('static', filename='uploads/' + project.image) }}" alt="{{ project.title }}" class="img-fluid w-100" style="max-height: 450px; object-fit: cover;">
+                <img src="{{ project.image }}" alt="{{ project.title }}" class="img-fluid w-100" style="max-height: 450px; object-fit: cover;">
                 {% else %}
                 <div class="d-flex align-items-center justify-content-center w-100" style="height: 300px; background-color: #111113; border-bottom: 1px solid var(--border-color);">
                     <i class="bi bi-image" style="font-size: 5rem; color: var(--border-color);"></i>
