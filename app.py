@@ -29,39 +29,33 @@ def upload_to_supabase(file):
 
     filename = f"{uuid.uuid4().hex}_{secure_filename(file.filename)}"
 
-    file.file.seek(0)
+    # Kembalikan pointer ke awal file
+    file.stream.seek(0)
 
+    # Upload ke Supabase
     supabase.storage.from_(app.config["SUPABASE_BUCKET"]).upload(
         path=filename,
-        file=file.file,
+        file=file.read(),
         file_options={
             "content-type": file.content_type,
             "upsert": "true"
         }
     )
 
-    public_url = supabase.storage.from_(
+    # Ambil URL publik
+    return supabase.storage.from_(
         app.config["SUPABASE_BUCKET"]
     ).get_public_url(filename)
 
-    return public_url
-
 def delete_from_supabase(url):
-    """Menghapus file dari Supabase Storage"""
-
     if not url:
         return
 
     try:
         filename = url.split("/")[-1]
-
-        supabase.storage.from_(
-            app.config["SUPABASE_BUCKET"]
-        ).remove([filename])
-
+        supabase.storage.from_(app.config["SUPABASE_BUCKET"]).remove([filename])
     except Exception as e:
         print("Gagal menghapus file:", e)
-
 def parse_photo_position(form):
     """Mengambil dan memvalidasi posisi foto profil (0-100%)."""
     try:
