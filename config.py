@@ -1,14 +1,18 @@
 import os
+from dotenv import load_dotenv
+
+# Membaca file .env
+load_dotenv()
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    SECRET_KEY = os.environ.get(
+    SECRET_KEY = os.getenv(
         "SECRET_KEY",
         "kunci-rahasia-portfolio-flask-2026"
     )
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
+    SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
         "sqlite:///" + os.path.join(BASE_DIR, "portfolio.db")
     )
@@ -22,5 +26,7 @@ class Config:
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024
 
     SUPABASE_URL = os.getenv("SUPABASE_URL")
+
     SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY")
+
     SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET")
